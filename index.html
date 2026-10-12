@@ -119,7 +119,7 @@
     display: flex; flex-direction: column; gap: 8px;
   }
   .fab {
-    height: 46px; min-width: 64px; padding: 0 14px;
+    height: 46px; width: 72px; padding: 0;
     background: var(--black); color: var(--white);
     font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
   }
@@ -195,7 +195,11 @@
   .tools { padding: 10px 16px 6px; display: grid; gap: 8px; }
   .search { height: 40px; width: 100%; padding: 0 12px; border: 0; box-shadow: inset 0 0 0 2px var(--black); font-size: 16px; font-weight: 500; background: var(--white); }
   .search::placeholder { color: var(--sub); }
-  .sort { display: flex; gap: 6px; }
+  .sort { display: flex; gap: 6px; align-items: center; }
+  .list-genre { margin-left: auto; height: 32px; color: var(--black); box-shadow: inset 0 0 0 1px var(--rule); max-width: 34vw; }
+  .list-genre.on { box-shadow: none; }
+  .tag { display: inline-block; margin-right: 6px; padding: 1px 5px; vertical-align: 2px;
+         background: var(--black); color: var(--white); font-size: 10px; font-weight: 700; letter-spacing: .04em; line-height: 1.4; }
   .sort .chip { height: 32px; box-shadow: inset 0 0 0 1px var(--rule); }
   .sort .chip[aria-pressed="true"] { background: var(--black); color: var(--white); box-shadow: none; }
   .sort .chip[aria-pressed="false"] { color: var(--sub); background: var(--white); }
@@ -262,6 +266,7 @@
       <button class="chip" data-sort="stars" aria-pressed="true">星の多い順</button>
       <button class="chip" data-sort="date" aria-pressed="false">新しい順</button>
       <button class="chip" data-sort="near" aria-pressed="false">近い順</button>
+      <select class="genre list-genre" id="list-genre" aria-label="ジャンルで絞り込み"></select>
     </div>
   </div>
   <ul class="rows" id="rows"></ul>
@@ -386,9 +391,19 @@ function setHeaderOffset() {
 // ===== filters =====
 function renderFilters() {
   const sel = $('genre');
-  sel.innerHTML = `<option value="">全ジャンル</option>` +
+  const opts = `<option value="">全ジャンル</option>` +
     GENRES.filter(g => shops.some(s => s.genre === g)).map(g => `<option value="${g}">${g}</option>`).join('');
-  sel.onchange = () => { genre = sel.value; sel.classList.toggle('on', !!genre); applyFilter(); fitVisible(); };
+  // header select and list select share one genre state
+  const lsel = $('list-genre');
+  sel.innerHTML = opts; lsel.innerHTML = opts;
+  const setGenre = (v, fit) => {
+    genre = v;
+    [sel, lsel].forEach(x => { x.value = v; x.classList.toggle('on', !!v); });
+    applyFilter();
+    if (fit) fitVisible();
+  };
+  sel.onchange = () => setGenre(sel.value, true);
+  lsel.onchange = () => setGenre(lsel.value, true);
   const box = $('filters');
   box.insertAdjacentHTML('beforeend', TIERS.map(t =>
     `<button class="chip" data-k="${t.key}" aria-pressed="false"><span class="sw" style="background:${t.color}"></span>${t.label}</button>`).join(''));
@@ -478,7 +493,7 @@ function showSheet(s, { pan = true } = {}) {
       <div class="sheet-top">${starHTML(s.stars)}<button class="close" id="sheet-close" aria-label="閉じる">✕</button></div>
       <h2 class="shop">${esc(s.name)}</h2>
       <div class="facts">
-        <span>${esc(s.genre)}</span>
+        ${s.bangai === '1' ? '<span class="tag">番外編</span>' : ''}<span>${esc(s.genre)}</span>
         ${s.price ? `<span><span class="k">予算</span>${yen(s.price)}${s.lunch === '1' ? '(ランチ)' : ''}</span>` : (s.lunch === '1' ? '<span>ランチ</span>' : '')}
       </div>
       ${s.comment ? `<p class="comment">${esc(s.comment)}</p>` : ''}
@@ -576,7 +591,7 @@ function renderList() {
     return `<li><button class="row" data-code="${s.code}">
       <span class="thumb"><img src="${IMG(s.code)}" alt="" loading="lazy" decoding="async">
         <span class="pin ${t.digit}" style="background:${t.color}">${mark(s)}</span></span>
-      <span class="nm">${esc(s.name)}<span class="sub">${esc(s.genre)}${s.price ? ' ・ ' + yen(s.price) : ''}${dist}</span></span>
+      <span class="nm">${s.bangai === '1' ? '<span class="tag">番外編</span>' : ''}${esc(s.name)}<span class="sub">${esc(s.genre)}${s.price ? ' ・ ' + yen(s.price) : ''}${dist}</span></span>
     </button></li>`;
   }).join('');
   ul.querySelectorAll('.row').forEach(b => b.onclick = () => {
