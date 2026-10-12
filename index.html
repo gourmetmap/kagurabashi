@@ -21,12 +21,12 @@
     --sub: #6E6E6A;
     --rule: #DEDEDA;
     --on-black: #C9C9C5;
-    /* star ramp: light -> deep red (ordinal). The digit on the pin is the secondary encoding. */
-    --s1: #F0A08A;
-    --s2: #E8694A;
-    --s3: #E23E14;
-    --s4: #A92C0C;
-    --s5: #5E1604;
+    /* ★1 grey, ★2→★5 pale → vivid red (★5 stands out most). The digit on the pin is the secondary encoding. */
+    --s1: #B4B4AE;
+    --s2: #F6C2B4;
+    --s3: #F08A6C;
+    --s4: #E8582F;
+    --s5: #E60012;
     --s0: #FFFFFF;
     --safe-b: env(safe-area-inset-bottom, 0px);
     --header-h: 70px;
@@ -70,9 +70,11 @@
   }
   .filters .chip { flex: 1 0 auto; justify-content: center; gap: 4px; padding: 0 5px; }
   .filters .sw { width: 10px; height: 10px; }
-  .chip[aria-pressed="false"] { background: transparent; color: var(--on-black); box-shadow: inset 0 0 0 1px #3a3a3e; }
   .sw { width: 12px; height: 12px; outline: 1.5px solid var(--black); outline-offset: -1.5px; }
-  .chip[aria-pressed="false"] .sw { opacity: .35; outline-color: var(--on-black); }
+  /* star chips: nothing picked → all look normal; once something is picked, unpicked ones dim */
+  .filters.has-pick .chip[aria-pressed="false"] { background: transparent; color: var(--on-black); box-shadow: inset 0 0 0 1px #3a3a3e; }
+  .filters.has-pick .chip[aria-pressed="false"] .sw { opacity: .35; outline-color: var(--on-black); }
+  .filters .chip[aria-pressed="true"] { box-shadow: inset 0 -3px 0 var(--red); }
   .genre {
     flex: 0 1 auto; min-width: 0; max-width: 46vw; height: 30px; padding: 0 24px 0 9px; border: 0;
     font-size: 13px; font-weight: 700; color: var(--black);
@@ -96,8 +98,9 @@
   }
   .pin.dark-digit { color: var(--black); }
   .pin.light-digit { color: var(--white); }
-  .z-far .pin-wrap:not(.selected) .pin { transform: scale(.62); font-size: 0; }
-  .z-mid .pin-wrap:not(.selected) .pin { transform: scale(.8); }
+  /* pin size follows the zoom level (set as --ps on the map container) */
+  .pin { transform: scale(var(--ps, 1)); }
+  .digits-off .pin-wrap:not(.selected) .pin { font-size: 0; }
   .pin-wrap.selected .pin { transform: scale(1.35); box-shadow: 0 0 0 3px var(--white), 0 0 0 5px var(--black); }
 
   /* ---------- floating ---------- */
@@ -268,7 +271,7 @@ const GENRES = ['ラーメン', '和食', '居酒屋', '焼き鳥', '焼肉', '�
 const TIERS = [
   { key: '5', label: '★5', color: 'var(--s5)', digit: 'light-digit' },
   { key: '4', label: '★4', color: 'var(--s4)', digit: 'light-digit' },
-  { key: '3', label: '★3', color: 'var(--s3)', digit: 'light-digit' },
+  { key: '3', label: '★3', color: 'var(--s3)', digit: 'dark-digit' },
   { key: '2', label: '★2', color: 'var(--s2)', digit: 'dark-digit' },
   { key: '1', label: '★1', color: 'var(--s1)', digit: 'dark-digit' },
   { key: '0', label: '★対象外', color: 'var(--s0)', digit: 'dark-digit' },
@@ -300,7 +303,8 @@ function parseCSV(text) {
 }
 
 // ===== state =====
-const activeTiers = new Set(TIERS.map(t => t.key));
+// Star filter: nothing picked = show everything; each tap adds/removes that tier (★5 then ★4 → ★4 or ★5).
+const pickedTiers = new Set();
 let genre = '';
 let shops = [], selected = null, sortKey = 'stars', here = null, query = '';
 
@@ -326,11 +330,13 @@ function pinIcon(s, isSel) {
   });
 }
 
-// shrink pins when zoomed out so the dense Kagurazaka strip stays readable
+// shrink pins step by step as the map zooms out so the dense Kagurazaka strip doesn't pile up
+const PIN_SCALE = { 13: 0.35, 14: 0.45, 15: 0.6, 16: 0.78, 17: 1 };
 function zoomClass() {
-  const z = map.getZoom(), el = map.getContainer();
-  el.classList.toggle('z-far', z <= 14);
-  el.classList.toggle('z-mid', z === 15 || z === 16);
+  const z = Math.round(map.getZoom()), el = map.getContainer();
+  const ps = z >= 17 ? 1 : (PIN_SCALE[z] ?? 0.3);
+  el.style.setProperty('--ps', ps);
+  el.classList.toggle('digits-off', ps < 0.6);
 }
 map.on('zoomend', zoomClass);
 zoomClass();
@@ -348,16 +354,15 @@ function renderFilters() {
   sel.onchange = () => { genre = sel.value; sel.classList.toggle('on', !!genre); applyFilter(); fitVisible(); };
   const box = $('filters');
   box.insertAdjacentHTML('beforeend', TIERS.map(t =>
-    `<button class="chip" data-k="${t.key}" aria-pressed="true"><span class="sw" style="background:${t.color}"></span>${t.label}</button>`).join(''));
+    `<button class="chip" data-k="${t.key}" aria-pressed="false"><span class="sw" style="background:${t.color}"></span>${t.label}</button>`).join(''));
   box.querySelectorAll('.chip').forEach(b => b.onclick = () => {
     const k = b.dataset.k;
-    activeTiers.has(k) ? activeTiers.delete(k) : activeTiers.add(k);
-    if (activeTiers.size === 0) TIERS.forEach(t => activeTiers.add(t.key)); // never leave the map empty
+    pickedTiers.has(k) ? pickedTiers.delete(k) : pickedTiers.add(k);
     applyFilter();
   });
 }
 
-const passes = s => activeTiers.has(tierOf(s)) && (!genre || s.genre === genre);
+const passes = s => (!pickedTiers.size || pickedTiers.has(tierOf(s))) && (!genre || s.genre === genre);
 const visible = () => shops.filter(passes);
 
 function applyFilter() {
@@ -366,7 +371,8 @@ function applyFilter() {
     if (on && !map.hasLayer(s.marker)) s.marker.addTo(map);
     if (!on && map.hasLayer(s.marker)) s.marker.remove();
   });
-  $('filters').querySelectorAll('.chip').forEach(b => b.setAttribute('aria-pressed', activeTiers.has(b.dataset.k)));
+  $('filters').classList.toggle('has-pick', pickedTiers.size > 0);
+  $('filters').querySelectorAll('.chip').forEach(b => b.setAttribute('aria-pressed', pickedTiers.has(b.dataset.k)));
   $('count').innerHTML = `<b>${visible().length}</b>軒/${shops.length}軒`;
   if (selected && !passes(selected)) hideSheet();
   if (list.classList.contains('open')) renderList();
@@ -413,8 +419,8 @@ function starHTML(n) {
 function hideHint() { $('hint').classList.add('gone'); }
 setTimeout(hideHint, 5000);
 
-function openSheet(s) {
-  showSheet(s);
+function openSheet(s, opts) {
+  showSheet(s, opts);
   pushLayer('sheet', { code: s.code, hash: '#' + s.code });
 }
 
@@ -579,7 +585,8 @@ fetch(DATA_URL, { cache: 'no-cache' }).then(r => r.text()).then(text => {
   shops.forEach(s => {
     s.z = (s.stars || 0) * 100; // higher stars draw on top
     s.marker = L.marker([s.lat, s.lng], { icon: pinIcon(s, false), zIndexOffset: s.z, keyboard: true, title: s.name })
-      .on('click', e => { L.DomEvent.stopPropagation(e); openSheet(s); });
+      // tapping a pin never moves the map (only list picks / shared links fly to the shop)
+      .on('click', e => { L.DomEvent.stopPropagation(e); openSheet(s, { pan: false }); });
   });
   renderFilters();
   applyFilter();
