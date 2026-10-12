@@ -41,6 +41,8 @@
     overflow: hidden;
   }
   button, select, input { font: inherit; color: inherit; }
+  /* iOS Safari: tapping chips in quick succession (★5 → ★4) must not trigger double-tap zoom */
+  button, select, input, a, header, .list, .sheet, .lightbox, .fabs { touch-action: manipulation; }
   button { background: none; border: 0; padding: 0; cursor: pointer; }
   a { color: inherit; }
 
