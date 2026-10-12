@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>神楽坂/飯田橋グルメ MAP</title>
+<meta name="description" content="@kagurabashi_gourmet が紹介した神楽坂・飯田橋周辺のお店を地図で。星は料理の味のみが対象。">
+<meta property="og:title" content="神楽坂/飯田橋グルメ MAP">
+<meta property="og:description" content="@kagurabashi_gourmet が紹介したお店を星の数で色分けした地図">
+<meta name="theme-color" content="#111114">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  :root {
+    --white: #FFFFFF;
+    --black: #111114;
+    --red: #E23E14;
+    --text: #2A2C30;
+    --sub: #6E6E6A;
+    --rule: #DEDEDA;
+    --on-black: #C9C9C5;
+    /* star ramp: light -> deep red (ordinal). Digit on the pin is the secondary encoding. */
+    --s1: #F0A08A;
+    --s2: #E8694A;
+    --s3: #E23E14;
+    --s4: #A92C0C;
+    --s5: #5E1604;
+    --bar: #FFFFFF;
+    --safe-b: env(safe-area-inset-bottom, 0px);
+  }
+  * { box-sizing: border-box; border-radius: 0 !important; }
+  html, body { margin: 0; height: 100%; background: var(--white); color: var(--text); }
+  body {
+    font-family: "Noto Sans JP", "Noto Sans CJK JP", sans-serif;
+    font-weight: 500;
+    font-feature-settings: "palt" 1;
+    -webkit-text-size-adjust: 100%;
+    overflow: hidden;
+  }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  a { color: inherit; }
+
+  /* ---------- header ---------- */
+  header {
+    position: fixed; inset: 0 0 auto 0; z-index: 1000;
+    background: var(--black); color: var(--white);
+    padding: calc(env(safe-area-inset-top, 0px) + 10px) 0 0;
+  }
+  .title-row { display: flex; align-items: baseline; gap: 10px; padding: 0 16px 8px; }
+  h1 { margin: 0; font-size: 18px; font-weight: 900; letter-spacing: -0.02em; white-space: nowrap; }
+  .count { font-size: 12px; font-weight: 700; color: var(--on-black); letter-spacing: 0.1em; }
+  .ig { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--on-black); text-decoration: none; letter-spacing: 0.06em; white-space: nowrap; }
+  .chips {
+    display: flex; gap: 6px; overflow-x: auto; padding: 0 16px 10px;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip {
+    flex: 0 0 auto; display: flex; align-items: center; gap: 6px;
+    height: 34px; padding: 0 12px; font-size: 13px; font-weight: 700;
+    background: var(--white); color: var(--black); white-space: nowrap;
+  }
+  .chip[aria-pressed="false"] { background: transparent; color: var(--on-black); box-shadow: inset 0 0 0 1px #3a3a3e; }
+  .chip[aria-pressed="false"] .sw { opacity: .35; }
+  .sw { width: 12px; height: 12px; outline: 1.5px solid var(--black); outline-offset: -1.5px; }
+  .chip[aria-pressed="false"] .sw { outline-color: var(--on-black); }
+
+  /* ---------- map ---------- */
+  #map { position: fixed; inset: 0; z-index: 1; background: #F2EFE9; }
+  .leaflet-control-attribution { font-size: 10px; }
+  .leaflet-tile-pane { filter: grayscale(1) contrast(.9); opacity: .6; }
+  .leaflet-top { top: var(--header-h, 100px); }
+
+  .pin {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; height: 100%;
+    border: 2px solid var(--black);
+    font-weight: 900; font-size: 13px; line-height: 1;
+    transition: transform .12s;
+  }
+  .pin.dark-digit { color: var(--black); }
+  .pin.light-digit { color: var(--white); }
+  .pin.bar { font-size: 11px; color: var(--black); }
+  .z-far .pin-wrap:not(.selected) .pin { transform: scale(.62); font-size: 0; }
+  .z-mid .pin-wrap:not(.selected) .pin { transform: scale(.8); }
+  .pin-wrap.selected .pin { transform: scale(1.35); box-shadow: 0 0 0 3px var(--white), 0 0 0 5px var(--black); }
+
+  /* ---------- floating buttons ---------- */
+  .fabs {
+    position: fixed; right: 12px; bottom: calc(24px + var(--safe-b)); z-index: 900;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .fab {
+    height: 44px; min-width: 44px; padding: 0 14px;
+    background: var(--black); color: var(--white);
+    font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
+  }
+  .fab.light { background: var(--white); color: var(--black); box-shadow: inset 0 0 0 2px var(--black); }
+
+  /* ---------- bottom sheet ---------- */
+  .sheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 1100;
+    max-height: 78vh; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    background: var(--white);
+    border-top: 3px solid var(--black);
+    padding: 8px 16px calc(20px + var(--safe-b));
+    transform: translateY(105%); transition: transform .22s ease-out;
+  }
+  .sheet.open { transform: translateY(0); }
+  .sheet-top { display: flex; justify-content: space-between; align-items: center; height: 36px; }
+  .stars { color: var(--red); font-size: 18px; letter-spacing: 0.08em; font-weight: 700; }
+  .stars .off { color: var(--rule); }
+  .norate { color: var(--sub); font-size: 13px; font-weight: 700; letter-spacing: 0.06em; }
+  .close { width: 44px; height: 44px; margin-right: -12px; font-size: 22px; font-weight: 500; color: var(--black); }
+  .shop { margin: 2px 0 10px; font-size: 22px; font-weight: 900; letter-spacing: -0.02em; line-height: 1.3; color: var(--black); }
+  .facts { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0 0 12px; font-size: 13px; font-weight: 700; color: var(--black); }
+  .facts span { white-space: nowrap; }
+  .facts .k { color: var(--sub); font-weight: 500; margin-right: 4px; }
+  .comment { margin: 0 0 14px; font-size: 15px; line-height: 1.75; color: var(--text); white-space: pre-line; }
+  .addr { margin: 0 0 16px; font-size: 12px; color: var(--sub); }
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .btn {
+    display: flex; align-items: center; justify-content: center;
+    height: 48px; font-size: 14px; font-weight: 700; text-decoration: none; letter-spacing: 0.04em;
+  }
+  .btn.primary { background: var(--black); color: var(--white); grid-column: 1 / -1; }
+  .btn.secondary { background: var(--white); color: var(--black); box-shadow: inset 0 0 0 2px var(--black); }
+  .embed { margin-top: 16px; }
+  .embed iframe { width: 100%; height: 560px; border: 0; display: block; background: var(--white); }
+  .posted { margin-top: 14px; font-size: 11px; color: var(--sub); letter-spacing: 0.1em; }
+
+  /* ---------- list panel ---------- */
+  .list {
+    position: fixed; inset: 0; z-index: 1200; background: var(--white);
+    display: none; flex-direction: column;
+  }
+  .list.open { display: flex; }
+  .list-head {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--black); color: var(--white);
+    padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px;
+  }
+  .list-head h2 { margin: 0; font-size: 16px; font-weight: 900; letter-spacing: -0.02em; }
+  .list-head .close { color: var(--white); }
+  .sort { display: flex; gap: 6px; padding: 10px 16px; }
+  .sort .chip { box-shadow: inset 0 0 0 1px var(--rule); }
+  .sort .chip[aria-pressed="true"] { background: var(--black); color: var(--white); box-shadow: none; }
+  .sort .chip[aria-pressed="false"] { color: var(--sub); }
+  .rows { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 16px calc(24px + var(--safe-b)); margin: 0; list-style: none; }
+  .row { display: grid; grid-template-columns: 28px 1fr auto; gap: 12px; align-items: center; width: 100%; text-align: left; padding: 14px 0; }
+  .row + .row { border-top: 1px solid var(--rule); }
+  .row .sq { width: 28px; height: 28px; font-size: 13px; }
+  .row .nm { font-size: 15px; font-weight: 700; color: var(--black); line-height: 1.35; }
+  .row .sub { display: block; font-size: 12px; font-weight: 500; color: var(--sub); margin-top: 2px; }
+  .row .wk { font-size: 12px; color: var(--sub); white-space: nowrap; }
+  .empty { padding: 40px 0; text-align: center; color: var(--sub); font-size: 14px; }
+
+  .note { position: fixed; left: 12px; bottom: calc(24px + var(--safe-b)); z-index: 900; margin: 0;
+          font-size: 11px; line-height: 1.6; color: var(--sub); background: var(--white); padding: 6px 8px; }
+  .note a { color: var(--black); font-weight: 700; text-decoration: none; }
+
+  @media (min-width: 768px) {
+    .sheet { left: auto; right: 16px; bottom: 16px; width: 400px; max-height: calc(100vh - var(--header-h, 100px) - 32px); border: 3px solid var(--black); }
+    .sheet:not(.open) { transform: translateX(120%); }
+    .fabs { right: 16px; bottom: 16px; }
+    .sheet.open ~ .fabs { right: 432px; }
+    .list { left: auto; width: 420px; border-left: 3px solid var(--black); }
+  }
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="title-row">
+    <h1>神楽坂/飯田橋グルメ MAP</h1>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="chips" id="chips" role="group" aria-label="星の数で絞り込み"></div>
+</header>
+
+<div id="map" aria-label="お店の地図"></div>
+
+<p class="note"><a href="https://www.instagram.com/kagurabashi_gourmet/" target="_blank" rel="noopener">@kagurabashi_gourmet</a><br>星は料理の味のみで評価</p>
+
+<section class="sheet" id="sheet" aria-live="polite" aria-hidden="true"></section>
+
+<div class="fabs">
+  <button class="fab" id="btn-list">一覧</button>
+  <button class="fab light" id="btn-locate" aria-label="現在地を表示">現在地</button>
+</div>
+
+<section class="list" id="list" aria-hidden="true">
+  <div class="list-head">
+    <h2 id="list-title">お店一覧</h2>
+    <button class="close" id="list-close" aria-label="一覧を閉じる">✕</button>
+  </div>
+  <div class="sort" role="group" aria-label="並び順">
+    <button class="chip" data-sort="stars" aria-pressed="true">星の多い順</button>
+    <button class="chip" data-sort="date" aria-pressed="false">新しい順</button>
+    <button class="chip" data-sort="near" aria-pressed="false">近い順</button>
+  </div>
+  <ul class="rows" id="rows"></ul>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+// ===== settings =====
+// To manage data in Google Sheets later, publish the sheet as CSV and put that URL here.
+const DATA_URL = 'data.csv';
+const IG_POST = code => `https://www.instagram.com/p/${code}/`;
+const CENTER = [35.7022, 139.7405];
+
+const TIERS = [
+  { key: '5', label: '★5', color: 'var(--s5)', digit: 'light-digit' },
+  { key: '4', label: '★4', color: 'var(--s4)', digit: 'light-digit' },
+  { key: '3', label: '★3', color: 'var(--s3)', digit: 'light-digit' },
+  { key: '2', label: '★2', color: 'var(--s2)', digit: 'dark-digit' },
+  { key: '1', label: '★1', color: 'var(--s1)', digit: 'dark-digit' },
+  { key: 'bar', label: 'バー(星なし)', color: 'var(--bar)', digit: 'bar' },
+];
+const tierOf = s => s.stars ? String(s.stars) : 'bar';
+const tierInfo = k => TIERS.find(t => t.key === k);
+
+// ===== CSV (handles quoted fields with newlines) =====
+function parseCSV(text) {
+  text = text.replace(/^﻿/, '');
+  const rows = []; let row = [], f = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) {
+      if (c === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; }
+      else f += c;
+    } else if (c === '"') q = true;
+    else if (c === ',') { row.push(f); f = ''; }
+    else if (c === '\n' || c === '\r') {
+      if (c === '\r' && text[i + 1] === '\n') i++;
+      row.push(f); rows.push(row); row = []; f = '';
+    } else f += c;
+  }
+  if (f || row.length) { row.push(f); rows.push(row); }
+  const head = rows.shift();
+  return rows.filter(r => r.length > 1).map(r => Object.fromEntries(head.map((h, i) => [h, r[i] ?? ''])));
+}
+
+// ===== state =====
+const active = new Set(TIERS.map(t => t.key));
+let shops = [], selected = null, sortKey = 'stars', here = null;
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const yen = n => n ? `〜${Number(n).toLocaleString('ja-JP')}円` : '';
+
+// ===== map =====
+const map = L.map('map', { zoomControl: false, attributionControl: true }).setView(CENTER, 16);
+// GSI (Geospatial Information Authority of Japan) pale map: Japanese labels, free with attribution
+L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
+  maxZoom: 19, maxNativeZoom: 18,
+  attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院</a>'
+}).addTo(map);
+
+function pinIcon(s, isSel) {
+  const t = tierInfo(tierOf(s));
+  const size = s.stars >= 5 ? 30 : s.stars >= 4 ? 28 : 26;
+  const txt = s.stars ? s.stars : '酒';
+  return L.divIcon({
+    className: 'pin-wrap' + (isSel ? ' selected' : ''),
+    html: `<div class="pin ${t.digit}" style="background:${t.color}">${txt}</div>`,
+    iconSize: [size, size], iconAnchor: [size / 2, size / 2],
+  });
+}
+
+function setHeaderOffset() {
+  const h = document.getElementById('header').offsetHeight;
+  document.documentElement.style.setProperty('--header-h', h + 'px');
+  map.invalidateSize();
+}
+
+// ===== filters =====
+function renderChips() {
+  const box = document.getElementById('chips');
+  box.innerHTML = TIERS.map(t => {
+    const n = shops.filter(s => tierOf(s) === t.key).length;
+    return `<button class="chip" data-k="${t.key}" aria-pressed="${active.has(t.key)}">
+      <span class="sw" style="background:${t.color}"></span>${t.label}<span style="font-weight:500">${n}</span></button>`;
+  }).join('');
+  box.querySelectorAll('.chip').forEach(b => b.onclick = () => {
+    const k = b.dataset.k;
+    active.has(k) ? active.delete(k) : active.add(k);
+    if (active.size === 0) TIERS.forEach(t => active.add(t.key)); // never leave the map empty
+    applyFilter();
+  });
+}
+
+function visible() { return shops.filter(s => active.has(tierOf(s))); }
+
+function applyFilter() {
+  shops.forEach(s => {
+    const on = active.has(tierOf(s));
+    if (on && !map.hasLayer(s.marker)) s.marker.addTo(map);
+    if (!on && map.hasLayer(s.marker)) s.marker.remove();
+  });
+  document.querySelectorAll('#chips .chip').forEach(b => b.setAttribute('aria-pressed', active.has(b.dataset.k)));
+  document.getElementById('count').textContent = `${visible().length}軒`;
+  if (selected && !active.has(tierOf(selected))) closeSheet();
+  renderList();
+}
+
+// ===== detail sheet =====
+const sheet = document.getElementById('sheet');
+
+function starHTML(n) {
+  if (!n) return `<span class="norate">ドリンク中心のため星なし</span>`;
+  return `<span class="stars" aria-label="星${n}つ">${'★'.repeat(n)}<span class="off">${'★'.repeat(5 - n)}</span></span>`;
+}
+
+function walkHTML(s) {
+  const out = [];
+  if (s.walk_kagurazaka) out.push(`<span><span class="k">神楽坂駅</span>徒歩約${s.walk_kagurazaka}分</span>`);
+  if (s.walk_iidabashi) out.push(`<span><span class="k">飯田橋駅</span>徒歩約${s.walk_iidabashi}分</span>`);
+  return out.join('');
+}
+
+function openSheet(s, { pan = true } = {}) {
+  if (selected) selected.marker.setIcon(pinIcon(selected, false));
+  selected = s;
+  s.marker.setIcon(pinIcon(s, true));
+  s.marker.setZIndexOffset(10000);
+  const gmap = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.name + ' ' + s.address)}`;
+  sheet.innerHTML = `
+    <div class="sheet-top">${starHTML(s.stars)}<button class="close" id="sheet-close" aria-label="閉じる">✕</button></div>
+    <h2 class="shop">${esc(s.name)}</h2>
+    <div class="facts">
+      ${s.price ? `<span><span class="k">予算</span>${yen(s.price)}${s.lunch === '1' ? '(ランチ)' : ''}</span>` : (s.lunch === '1' ? '<span>ランチ</span>' : '')}
+      ${walkHTML(s)}
+    </div>
+    ${s.comment ? `<p class="comment">${esc(s.comment)}</p>` : ''}
+    <p class="addr">${esc(s.address)}</p>
+    <div class="actions">
+      <a class="btn primary" href="${IG_POST(s.code)}" target="_blank" rel="noopener">Instagramで投稿を見る</a>
+      <a class="btn secondary" href="${gmap}" target="_blank" rel="noopener">Googleマップ</a>
+      <button class="btn secondary" id="btn-photo">写真を表示</button>
+    </div>
+    <div class="embed" id="embed"></div>
+    <div class="posted">投稿日 ${s.date.replace(/-/g, '.')}</div>`;
+  sheet.classList.add('open');
+  sheet.setAttribute('aria-hidden', 'false');
+  sheet.scrollTop = 0;
+  document.getElementById('sheet-close').onclick = closeSheet;
+  document.getElementById('btn-photo').onclick = e => {
+    e.target.remove();
+    document.getElementById('embed').innerHTML =
+      `<iframe src="${IG_POST(s.code)}embed/" loading="lazy" title="${esc(s.name)} の投稿"></iframe>`;
+  };
+  history.replaceState(null, '', '#' + s.code);
+  if (pan) {
+    // keep the pin visible above the sheet on phones
+    const mobile = innerWidth < 768;
+    const z = Math.max(map.getZoom(), 17);
+    const pt = map.project([s.lat, s.lng], z);
+    if (mobile) pt.y += sheet.offsetHeight / 2 - 40;
+    map.flyTo(map.unproject(pt, z), z, { duration: 0.4 });
+  }
+}
+
+function closeSheet() {
+  if (selected) { selected.marker.setIcon(pinIcon(selected, false)); selected.marker.setZIndexOffset(selected.z); }
+  selected = null;
+  sheet.classList.remove('open');
+  sheet.setAttribute('aria-hidden', 'true');
+  history.replaceState(null, '', location.pathname + location.search);
+}
+map.on('click', closeSheet);
+
+// shrink pins when zoomed out so the dense Kagurazaka strip stays readable
+function zoomClass() {
+  const z = map.getZoom(), el = map.getContainer();
+  el.classList.toggle('z-far', z <= 15);
+  el.classList.toggle('z-mid', z === 16);
+}
+map.on('zoomend', zoomClass);
+zoomClass();
+
+// ===== list =====
+const list = document.getElementById('list');
+function distM(s) {
+  if (!here) return null;
+  return Math.hypot((s.lat - here[0]) * 111000, (s.lng - here[1]) * 90500);
+}
+function renderList() {
+  let v = visible().slice();
+  if (sortKey === 'stars') v.sort((a, b) => (b.stars || 0) - (a.stars || 0) || b.date.localeCompare(a.date));
+  if (sortKey === 'date') v.sort((a, b) => b.date.localeCompare(a.date));
+  if (sortKey === 'near') v.sort((a, b) => (distM(a) ?? Math.hypot(a.lat - CENTER[0], a.lng - CENTER[1]) * 1e5) - (distM(b) ?? Math.hypot(b.lat - CENTER[0], b.lng - CENTER[1]) * 1e5));
+  document.getElementById('list-title').textContent = `お店一覧 ${v.length}軒`;
+  const ul = document.getElementById('rows');
+  if (!v.length) { ul.innerHTML = '<li class="empty">該当するお店がありません</li>'; return; }
+  ul.innerHTML = v.map(s => {
+    const t = tierInfo(tierOf(s));
+    const d = distM(s);
+    const right = d != null ? `${d < 1000 ? Math.round(d / 10) * 10 + 'm' : (d / 1000).toFixed(1) + 'km'}`
+      : (s.walk_kagurazaka || s.walk_iidabashi ? `徒歩${Math.min(...[s.walk_kagurazaka, s.walk_iidabashi].filter(Boolean).map(Number))}分` : '');
+    return `<li><button class="row" data-code="${s.code}">
+      <span class="pin sq ${t.digit}" style="background:${t.color}">${s.stars || '酒'}</span>
+      <span class="nm">${esc(s.name)}<span class="sub">${yen(s.price)}${s.lunch === '1' ? ' ランチ' : ''}</span></span>
+      <span class="wk">${right}</span></button></li>`;
+  }).join('');
+  ul.querySelectorAll('.row').forEach(b => b.onclick = () => {
+    closeList();
+    openSheet(shops.find(s => s.code === b.dataset.code));
+  });
+}
+function openList() { renderList(); list.classList.add('open'); list.setAttribute('aria-hidden', 'false'); }
+function closeList() { list.classList.remove('open'); list.setAttribute('aria-hidden', 'true'); }
+document.getElementById('btn-list').onclick = openList;
+document.getElementById('list-close').onclick = closeList;
+document.querySelectorAll('.sort .chip').forEach(b => b.onclick = () => {
+  sortKey = b.dataset.sort;
+  document.querySelectorAll('.sort .chip').forEach(x => x.setAttribute('aria-pressed', x === b));
+  if (sortKey === 'near' && !here) locate(false);
+  renderList();
+});
+
+// ===== geolocation =====
+let hereMarker = null;
+function locate(fly = true) {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(p => {
+    here = [p.coords.latitude, p.coords.longitude];
+    if (!hereMarker) hereMarker = L.circleMarker(here, { radius: 8, color: '#FFFFFF', weight: 3, fillColor: '#111114', fillOpacity: 1 }).addTo(map);
+    else hereMarker.setLatLng(here);
+    if (fly) map.flyTo(here, 17, { duration: 0.5 });
+    renderList();
+  }, () => alert('現在地を取得できませんでした'), { enableHighAccuracy: true, timeout: 8000 });
+}
+document.getElementById('btn-locate').onclick = () => locate(true);
+
+// ===== boot =====
+fetch(DATA_URL, { cache: 'no-cache' }).then(r => r.text()).then(text => {
+  shops = parseCSV(text).map(r => ({
+    ...r,
+    stars: r.stars ? Number(r.stars) : 0,
+    lat: Number(r.lat), lng: Number(r.lng),
+  })).filter(s => s.lat && s.lng);
+  shops.forEach(s => {
+    s.z = (s.stars || 0) * 100; // higher stars draw on top
+    s.marker = L.marker([s.lat, s.lng], { icon: pinIcon(s, false), zIndexOffset: s.z, keyboard: true, title: s.name })
+      .on('click', e => { L.DomEvent.stopPropagation(e); openSheet(s); });
+  });
+  renderChips();
+  applyFilter();
+  setHeaderOffset();
+  const code = location.hash.slice(1);
+  const hit = code && shops.find(s => s.code === code);
+  if (hit) openSheet(hit);
+});
+addEventListener('resize', setHeaderOffset);
+setHeaderOffset();
+</script>
+</body>
+</html>
