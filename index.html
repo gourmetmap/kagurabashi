@@ -127,13 +127,6 @@
   .note { position: fixed; left: 12px; bottom: calc(20px + var(--safe-b)); z-index: 900; margin: 0;
           font-size: 11px; line-height: 1.6; color: var(--sub); background: var(--white); padding: 6px 8px; }
   .note a { color: var(--black); font-weight: 700; text-decoration: none; }
-  .hint {
-    position: fixed; left: 50%; top: calc(var(--header-h) + 12px); transform: translateX(-50%);
-    z-index: 950; background: var(--black); color: var(--white);
-    font-size: 13px; font-weight: 700; padding: 9px 14px; white-space: nowrap;
-    transition: opacity .4s; pointer-events: none;
-  }
-  .hint.gone { opacity: 0; }
 
   /* ---------- detail sheet ---------- */
   .sheet {
@@ -246,7 +239,6 @@
 <div id="map" aria-label="お店の地図"></div>
 
 <p class="note"><a href="https://www.instagram.com/kagurabashi_gourmet/" target="_blank" rel="noopener">@kagurabashi_gourmet</a><br>星は料理の味のみで評価</p>
-<div class="hint" id="hint">ピンをタップするとお店の詳細が出ます</div>
 
 <section class="sheet" id="sheet" aria-hidden="true"></section>
 
@@ -468,16 +460,12 @@ function starHTML(n) {
   return `<span class="stars" aria-label="星${n}つ">${'★'.repeat(n)}<span class="off">${'★'.repeat(5 - n)}</span></span>`;
 }
 
-function hideHint() { $('hint').classList.add('gone'); }
-setTimeout(hideHint, 5000);
-
 function openSheet(s, opts) {
   showSheet(s, opts);
   pushLayer('sheet', { code: s.code, hash: '#' + s.code });
 }
 
 function showSheet(s, { pan = true } = {}) {
-  hideHint();
   if (selected) { selected.marker.setIcon(pinIcon(selected, false)); selected.marker.setZIndexOffset(selected.z); }
   selected = s;
   s.marker.setIcon(pinIcon(s, true));
@@ -620,7 +608,7 @@ function locate(fly = true) {
   if (!navigator.geolocation) return;
   navigator.geolocation.getCurrentPosition(p => {
     here = [p.coords.latitude, p.coords.longitude];
-    if (!hereMarker) hereMarker = L.circleMarker(here, { radius: 8, color: '#FFFFFF', weight: 3, fillColor: '#111114', fillOpacity: 1 }).addTo(map);
+    if (!hereMarker) hereMarker = L.circleMarker(here, { radius: 9, color: '#FFFFFF', weight: 3, fillColor: '#00B7FF', fillOpacity: 1 }).addTo(map);
     else hereMarker.setLatLng(here);
     if (fly) map.flyTo(here, 17, { duration: 0.5 });
     if (list.classList.contains('open')) renderList();
