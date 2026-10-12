@@ -189,6 +189,7 @@ function popLayer(name) {
 }
 addEventListener('popstate', () => {
   const st = history.state || {};
+  if (st.layer !== 'info') hideInfo();
   if (st.layer !== 'lightbox') hideLightbox();
   if (st.layer !== 'list' && st.layer !== 'lightbox') hideList();
   if (st.layer === 'sheet' || st.layer === 'lightbox') {
@@ -298,6 +299,19 @@ function enableSwipeDown() {
     el.addEventListener('touchend', end);
   });
 }
+
+// ===== ⓘ star definitions =====
+const infoPop = $('info-pop');
+function openInfo() {
+  infoPop.classList.add('open');
+  infoPop.setAttribute('aria-hidden', 'false');
+  pushLayer('info');
+  track('info_open');
+}
+function hideInfo() { infoPop.classList.remove('open'); infoPop.setAttribute('aria-hidden', 'true'); }
+$('btn-info').onclick = openInfo;
+$('info-close').onclick = () => popLayer('info');
+infoPop.onclick = e => { if (e.target === infoPop) popLayer('info'); }; // tap outside the card closes
 
 // ===== photo lightbox =====
 const lightbox = $('lightbox');
