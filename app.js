@@ -1,6 +1,6 @@
 // ===== settings =====
 // Google Analytics 4 measurement ID (G-XXXXXXXXXX). Empty = analytics off.
-const GA_ID = '';
+const GA_ID = 'G-CWMLT628SM';
 // To manage data in Google Sheets later, publish the sheet as CSV and put that URL here.
 const DATA_URL = 'data.csv';
 
