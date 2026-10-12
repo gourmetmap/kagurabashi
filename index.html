@@ -100,15 +100,13 @@
   .pin.light-digit { color: var(--white); }
   /* station landmarks: black square dot on the exact spot + black label above */
   .station { position: relative; }
-  .station .dot { position: absolute; left: -5px; top: -5px; width: 10px; height: 10px; background: var(--black); outline: 2px solid var(--white); }
+  .station .dot { position: absolute; left: -4px; top: -4px; width: 8px; height: 8px; background: var(--black); outline: 1.5px solid var(--white); }
   .station .lbl {
-    position: absolute; left: 0; bottom: 9px; transform: translateX(-50%);
+    position: absolute; left: 0; bottom: 6px; transform: translateX(-50%);
     background: var(--black); color: var(--white); white-space: nowrap;
-    font-size: 11px; font-weight: 700; padding: 2px 6px; letter-spacing: .04em;
+    font-size: 10px; font-weight: 700; line-height: 1.3; padding: 0 3px; letter-spacing: .02em;
   }
-  .station.main .dot { left: -7px; top: -7px; width: 14px; height: 14px; }
-  .station.main .lbl { font-size: 14px; font-weight: 900; padding: 4px 9px; bottom: 11px; }
-  .digits-off .station:not(.main) .lbl { display: none; }
+  .very-far .station .lbl { display: none; }
 
   /* pin size follows the zoom level (set as --ps on the map container) */
   .pin { transform: scale(var(--ps, 1)); }
@@ -343,19 +341,19 @@ L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
   attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院</a>'
 }).addTo(map);
 
-// Stations as landmarks: Iidabashi / Kagurazaka emphasised, neighbours smaller. Drawn under the pins, not tappable.
+// Stations as small landmarks (all styled the same). Drawn under the pins, not tappable.
 const STATIONS = [
-  ['飯田橋駅', 35.70208, 139.74502, 1], ['神楽坂駅', 35.70387, 139.73443, 1],
-  ['牛込神楽坂駅', 35.70086, 139.73587, 0], ['九段下駅', 35.69548, 139.75115, 0],
-  ['市ケ谷駅', 35.69101, 139.73557, 0], ['水道橋駅', 35.70205, 139.7535, 0],
-  ['江戸川橋駅', 35.70973, 139.73298, 0], ['後楽園駅', 35.70849, 139.75182, 0],
+  ['飯田橋駅', 35.70208, 139.74502], ['神楽坂駅', 35.70387, 139.73443],
+  ['牛込神楽坂駅', 35.70086, 139.73587], ['九段下駅', 35.69548, 139.75115],
+  ['市ケ谷駅', 35.69101, 139.73557], ['水道橋駅', 35.70205, 139.7535],
+  ['江戸川橋駅', 35.70973, 139.73298], ['後楽園駅', 35.70849, 139.75182],
 ];
 const stationPane = map.createPane('stations');
 stationPane.style.zIndex = 450; // above tiles/overlays, below markers (600)
 stationPane.style.pointerEvents = 'none';
-STATIONS.forEach(([name, lat, lng, main]) => L.marker([lat, lng], {
+STATIONS.forEach(([name, lat, lng]) => L.marker([lat, lng], {
   pane: 'stations', interactive: false, keyboard: false,
-  icon: L.divIcon({ className: 'station' + (main ? ' main' : ''), html: `<span class="dot"></span><span class="lbl">${name}</span>`, iconSize: [0, 0] }),
+  icon: L.divIcon({ className: 'station', html: `<span class="dot"></span><span class="lbl">${name}</span>`, iconSize: [0, 0] }),
 }).addTo(map));
 
 function pinIcon(s, isSel) {
@@ -375,6 +373,7 @@ function zoomClass() {
   const ps = z >= 18 ? 1 : (PIN_SCALE[z] ?? 0.24);
   el.style.setProperty('--ps', ps);
   el.classList.toggle('digits-off', ps < 0.6);
+  el.classList.toggle('very-far', z <= 13);
 }
 map.on('zoomend', zoomClass);
 zoomClass();
