@@ -98,6 +98,18 @@
   }
   .pin.dark-digit { color: var(--black); }
   .pin.light-digit { color: var(--white); }
+  /* station landmarks: black square dot on the exact spot + black label above */
+  .station { position: relative; }
+  .station .dot { position: absolute; left: -5px; top: -5px; width: 10px; height: 10px; background: var(--black); outline: 2px solid var(--white); }
+  .station .lbl {
+    position: absolute; left: 0; bottom: 9px; transform: translateX(-50%);
+    background: var(--black); color: var(--white); white-space: nowrap;
+    font-size: 11px; font-weight: 700; padding: 2px 6px; letter-spacing: .04em;
+  }
+  .station.main .dot { left: -7px; top: -7px; width: 14px; height: 14px; }
+  .station.main .lbl { font-size: 14px; font-weight: 900; padding: 4px 9px; bottom: 11px; }
+  .digits-off .station:not(.main) .lbl { display: none; }
+
   /* pin size follows the zoom level (set as --ps on the map container) */
   .pin { transform: scale(var(--ps, 1)); }
   .digits-off .pin-wrap:not(.selected) .pin { font-size: 0; }
@@ -197,6 +209,9 @@
   .thumb .pin { position: absolute; left: -4px; top: -4px; width: 24px; height: 24px; font-size: 12px; }
   .row .nm { font-size: 15px; font-weight: 700; color: var(--black); line-height: 1.35; }
   .row .sub { display: block; font-size: 12px; font-weight: 500; color: var(--sub); margin-top: 3px; }
+  /* same spot as the 一覧 button on the map (it sits above the 46px 現在地 button + 8px gap) */
+  .to-map { position: fixed; right: 12px; bottom: calc(20px + 46px + 8px + var(--safe-b)); z-index: 2; }
+  .rows { padding-bottom: calc(130px + var(--safe-b)); }
   .empty { padding: 40px 0; text-align: center; color: var(--sub); font-size: 14px; }
 
   @media (min-width: 768px) {
@@ -209,6 +224,7 @@
     .fabs { right: 16px; bottom: 16px; }
     .sheet.open ~ .fabs { right: 432px; }
     .list { left: auto; width: 420px; border-left: 3px solid var(--black); }
+    .to-map { right: 16px; bottom: calc(16px + 46px + 8px); }
   }
 </style>
 </head>
@@ -251,6 +267,7 @@
     </div>
   </div>
   <ul class="rows" id="rows"></ul>
+  <button class="fab to-map" id="btn-map">マップ</button>
 </section>
 
 <div class="lightbox" id="lightbox" role="dialog" aria-label="写真">
@@ -313,12 +330,33 @@ const yen = n => n ? `〜${Number(n).toLocaleString('ja-JP')}円` : '';
 const $ = id => document.getElementById(id);
 
 // ===== map =====
-const map = L.map('map', { zoomControl: false }).setView(CENTER, 16);
+const map = L.map('map', { zoomControl: false, zoomSnap: 0.5 }).setView(CENTER, 16);
+// first view: both main stations (Kagurazaka west, Iidabashi east) on screen
+function fitStations() {
+  map.fitBounds([[35.70387, 139.73443], [35.70208, 139.74502]], {
+    paddingTopLeft: [30, (document.getElementById('header')?.offsetHeight || 80) + 40], paddingBottomRight: [30, 90],
+  });
+}
 // GSI (Geospatial Information Authority of Japan) pale map: Japanese labels, free with attribution
 L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
   maxZoom: 19, maxNativeZoom: 18,
   attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院</a>'
 }).addTo(map);
+
+// Stations as landmarks: Iidabashi / Kagurazaka emphasised, neighbours smaller. Drawn under the pins, not tappable.
+const STATIONS = [
+  ['飯田橋駅', 35.70208, 139.74502, 1], ['神楽坂駅', 35.70387, 139.73443, 1],
+  ['牛込神楽坂駅', 35.70086, 139.73587, 0], ['九段下駅', 35.69548, 139.75115, 0],
+  ['市ケ谷駅', 35.69101, 139.73557, 0], ['水道橋駅', 35.70205, 139.7535, 0],
+  ['江戸川橋駅', 35.70973, 139.73298, 0], ['後楽園駅', 35.70849, 139.75182, 0],
+];
+const stationPane = map.createPane('stations');
+stationPane.style.zIndex = 450; // above tiles/overlays, below markers (600)
+stationPane.style.pointerEvents = 'none';
+STATIONS.forEach(([name, lat, lng, main]) => L.marker([lat, lng], {
+  pane: 'stations', interactive: false, keyboard: false,
+  icon: L.divIcon({ className: 'station' + (main ? ' main' : ''), html: `<span class="dot"></span><span class="lbl">${name}</span>`, iconSize: [0, 0] }),
+}).addTo(map));
 
 function pinIcon(s, isSel) {
   const t = tierInfo(tierOf(s));
@@ -331,10 +369,10 @@ function pinIcon(s, isSel) {
 }
 
 // shrink pins step by step as the map zooms out so the dense Kagurazaka strip doesn't pile up
-const PIN_SCALE = { 13: 0.35, 14: 0.45, 15: 0.6, 16: 0.78, 17: 1 };
+const PIN_SCALE = { 13: 0.28, 14: 0.35, 15: 0.45, 16: 0.6, 17: 0.8, 18: 1 };
 function zoomClass() {
   const z = Math.round(map.getZoom()), el = map.getContainer();
-  const ps = z >= 17 ? 1 : (PIN_SCALE[z] ?? 0.3);
+  const ps = z >= 18 ? 1 : (PIN_SCALE[z] ?? 0.24);
   el.style.setProperty('--ps', ps);
   el.classList.toggle('digits-off', ps < 0.6);
 }
@@ -553,6 +591,7 @@ function openList() { renderList(); list.classList.add('open'); list.setAttribut
 function hideList() { list.classList.remove('open'); list.setAttribute('aria-hidden', 'true'); }
 $('btn-list').onclick = openList;
 $('list-close').onclick = () => popLayer('list');
+$('btn-map').onclick = () => popLayer('list');
 $('search').oninput = e => { query = e.target.value; renderList(); };
 document.querySelectorAll('.sort .chip').forEach(b => b.onclick = () => {
   sortKey = b.dataset.sort;
@@ -591,6 +630,7 @@ fetch(DATA_URL, { cache: 'no-cache' }).then(r => r.text()).then(text => {
   renderFilters();
   applyFilter();
   setHeaderOffset();
+  fitStations();
   // deep link: .../#<post code> opens that shop
   const hit = shops.find(s => s.code === location.hash.slice(1));
   history.replaceState(null, '', location.pathname + location.search);
