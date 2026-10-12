@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>神楽坂/飯田橋グルメ MAP</title>
+<title>神楽坂/飯田橋グルメ 一覧マップ</title>
 <meta name="description" content="@kagurabashi_gourmet が紹介した神楽坂・飯田橋周辺のお店を地図で。星は料理の味のみが対象。">
-<meta property="og:title" content="神楽坂/飯田橋グルメ MAP">
+<meta property="og:title" content="神楽坂/飯田橋グルメ 一覧マップ">
 <meta property="og:description" content="@kagurabashi_gourmet が紹介したお店を星の数で色分けした地図">
 <meta name="theme-color" content="#111114">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,8 +51,11 @@
     padding: calc(env(safe-area-inset-top, 0px) + 6px) 0 0;
   }
   .title-row { display: flex; align-items: center; gap: 8px; padding: 0 12px 6px; }
-  .title-row .genre { margin-left: auto; }
-  h1 { margin: 0; font-size: 16px; font-weight: 900; letter-spacing: -0.02em; white-space: nowrap; }
+  .title-row .genre { margin-left: auto; flex: 0 0 auto; min-width: 104px; }
+  .title-block { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .title-block h1 { line-height: 1.25; }
+  .title-block .count { font-size: 11px; line-height: 1.2; }
+  h1 { margin: 0; font-size: 15px; font-weight: 900; letter-spacing: -0.02em; white-space: nowrap; }
   .count { font-size: 12px; font-weight: 700; color: var(--on-black); letter-spacing: 0.04em; white-space: nowrap; }
   .count b { color: var(--white); font-weight: 900; }
   .filters {
@@ -133,11 +136,12 @@
   .sheet.dragging { transition: none; }
   .grab { position: sticky; top: 0; z-index: 2; height: 22px; background: var(--white); display: flex; justify-content: center; align-items: center; touch-action: none; }
   .grab::before { content: ""; width: 40px; height: 4px; background: var(--rule); }
+  /* frame hugs the photo: height is capped, width follows the photo's own aspect, no letterbox bars */
   .photo {
-    position: relative; display: block; width: 100%; background: var(--black);
-    height: min(36vh, 125vw); cursor: zoom-in; touch-action: pan-y;
+    position: relative; display: block; width: fit-content; max-width: 100%; margin: 0 auto;
+    cursor: zoom-in; touch-action: pan-y;
   }
-  .photo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .photo img { display: block; height: min(36vh, 125vw); width: auto; max-width: 100%; object-fit: cover; }
   .photo .zoom { position: absolute; right: 8px; bottom: 8px; background: rgba(17,17,20,.8); color: var(--white); font-size: 11px; font-weight: 700; padding: 4px 8px; letter-spacing: .06em; }
   .body { padding: 12px 16px 0; }
   .sheet-top { display: flex; justify-content: space-between; align-items: center; min-height: 28px; }
@@ -198,7 +202,7 @@
     .sheet { left: auto; right: 16px; bottom: 16px; width: 400px; max-height: calc(100% - var(--header-h) - 32px); border: 3px solid var(--black); padding-bottom: 18px; }
     .sheet:not(.open) { transform: translateX(120%); }
     .grab { display: none; }
-    .photo { height: 360px; }
+    .photo img { height: 360px; }
     .fabs { right: 16px; bottom: 16px; }
     .sheet.open ~ .fabs { right: 432px; }
     .list { left: auto; width: 420px; border-left: 3px solid var(--black); }
@@ -209,8 +213,10 @@
 
 <header id="header">
   <div class="title-row">
-    <h1>神楽坂/飯田橋グルメ</h1>
-    <span class="count" id="count"></span>
+    <div class="title-block">
+      <h1>神楽坂/飯田橋グルメ 一覧マップ</h1>
+      <span class="count" id="count"></span>
+    </div>
     <select class="genre" id="genre" aria-label="ジャンルで絞り込み"></select>
   </div>
   <div class="filters" id="filters" role="group" aria-label="星の数で絞り込み"></div>
