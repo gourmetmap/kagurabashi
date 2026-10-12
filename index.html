@@ -46,20 +46,19 @@
   header {
     position: fixed; inset: 0 0 auto 0; z-index: 1000;
     background: var(--black); color: var(--white);
-    padding: calc(env(safe-area-inset-top, 0px) + 10px) 0 0;
+    padding: calc(env(safe-area-inset-top, 0px) + 6px) 0 0;
   }
-  .title-row { display: flex; align-items: baseline; gap: 10px; padding: 0 16px 8px; }
-  h1 { margin: 0; font-size: 18px; font-weight: 900; letter-spacing: -0.02em; white-space: nowrap; }
-  .count { font-size: 12px; font-weight: 700; color: var(--on-black); letter-spacing: 0.1em; }
-  .ig { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--on-black); text-decoration: none; letter-spacing: 0.06em; white-space: nowrap; }
+  .title-row { display: flex; align-items: baseline; gap: 8px; padding: 0 12px 5px; }
+  h1 { margin: 0; font-size: 16px; font-weight: 900; letter-spacing: -0.02em; white-space: nowrap; }
+  .count { font-size: 11px; font-weight: 700; color: var(--on-black); letter-spacing: 0.1em; }
   .chips {
-    display: flex; gap: 6px; overflow-x: auto; padding: 0 16px 10px;
+    display: flex; gap: 5px; overflow-x: auto; padding: 0 12px 7px;
     scrollbar-width: none; -webkit-overflow-scrolling: touch;
   }
   .chips::-webkit-scrollbar { display: none; }
   .chip {
-    flex: 0 0 auto; display: flex; align-items: center; gap: 6px;
-    height: 34px; padding: 0 12px; font-size: 13px; font-weight: 700;
+    flex: 0 0 auto; display: flex; align-items: center; gap: 5px;
+    height: 30px; padding: 0 10px; font-size: 13px; font-weight: 700;
     background: var(--white); color: var(--black); white-space: nowrap;
   }
   .chip[aria-pressed="false"] { background: transparent; color: var(--on-black); box-shadow: inset 0 0 0 1px #3a3a3e; }
@@ -160,6 +159,14 @@
   .note { position: fixed; left: 12px; bottom: calc(24px + var(--safe-b)); z-index: 900; margin: 0;
           font-size: 11px; line-height: 1.6; color: var(--sub); background: var(--white); padding: 6px 8px; }
   .note a { color: var(--black); font-weight: 700; text-decoration: none; }
+  /* first-visit hint: tells people what to do without reading anything */
+  .hint {
+    position: fixed; left: 50%; top: calc(var(--header-h, 70px) + 12px); transform: translateX(-50%);
+    z-index: 950; background: var(--black); color: var(--white);
+    font-size: 13px; font-weight: 700; padding: 9px 14px; white-space: nowrap;
+    transition: opacity .4s; pointer-events: none;
+  }
+  .hint.gone { opacity: 0; }
 
   @media (min-width: 768px) {
     .sheet { left: auto; right: 16px; bottom: 16px; width: 400px; max-height: calc(100vh - var(--header-h, 100px) - 32px); border: 3px solid var(--black); }
@@ -183,6 +190,8 @@
 <div id="map" aria-label="お店の地図"></div>
 
 <p class="note"><a href="https://www.instagram.com/kagurabashi_gourmet/" target="_blank" rel="noopener">@kagurabashi_gourmet</a><br>星は料理の味のみで評価</p>
+
+<div class="hint" id="hint">ピンをタップするとお店の詳細が出ます</div>
 
 <section class="sheet" id="sheet" aria-live="polite" aria-hidden="true"></section>
 
@@ -218,8 +227,9 @@ const TIERS = [
   { key: '3', label: '★3', color: 'var(--s3)', digit: 'light-digit' },
   { key: '2', label: '★2', color: 'var(--s2)', digit: 'dark-digit' },
   { key: '1', label: '★1', color: 'var(--s1)', digit: 'dark-digit' },
-  { key: 'bar', label: 'バー(星なし)', color: 'var(--bar)', digit: 'bar' },
+  { key: 'bar', label: '★対象外', color: 'var(--bar)', digit: 'bar' },
 ];
+const NO_RATE_MARK = '−';
 const tierOf = s => s.stars ? String(s.stars) : 'bar';
 const tierInfo = k => TIERS.find(t => t.key === k);
 
@@ -262,7 +272,7 @@ L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
 function pinIcon(s, isSel) {
   const t = tierInfo(tierOf(s));
   const size = s.stars >= 5 ? 30 : s.stars >= 4 ? 28 : 26;
-  const txt = s.stars ? s.stars : '酒';
+  const txt = s.stars ? s.stars : NO_RATE_MARK;
   return L.divIcon({
     className: 'pin-wrap' + (isSel ? ' selected' : ''),
     html: `<div class="pin ${t.digit}" style="background:${t.color}">${txt}</div>`,
@@ -310,7 +320,7 @@ function applyFilter() {
 const sheet = document.getElementById('sheet');
 
 function starHTML(n) {
-  if (!n) return `<span class="norate">ドリンク中心のため星なし</span>`;
+  if (!n) return `<span class="norate">★対象外(ドリンク中心のお店)</span>`;
   return `<span class="stars" aria-label="星${n}つ">${'★'.repeat(n)}<span class="off">${'★'.repeat(5 - n)}</span></span>`;
 }
 
@@ -321,7 +331,11 @@ function walkHTML(s) {
   return out.join('');
 }
 
+function hideHint() { document.getElementById('hint').classList.add('gone'); }
+setTimeout(hideHint, 5000);
+
 function openSheet(s, { pan = true } = {}) {
+  hideHint();
   if (selected) selected.marker.setIcon(pinIcon(selected, false));
   selected = s;
   s.marker.setIcon(pinIcon(s, true));
@@ -401,7 +415,7 @@ function renderList() {
     const right = d != null ? `${d < 1000 ? Math.round(d / 10) * 10 + 'm' : (d / 1000).toFixed(1) + 'km'}`
       : (s.walk_kagurazaka || s.walk_iidabashi ? `徒歩${Math.min(...[s.walk_kagurazaka, s.walk_iidabashi].filter(Boolean).map(Number))}分` : '');
     return `<li><button class="row" data-code="${s.code}">
-      <span class="pin sq ${t.digit}" style="background:${t.color}">${s.stars || '酒'}</span>
+      <span class="pin sq ${t.digit}" style="background:${t.color}">${s.stars || NO_RATE_MARK}</span>
       <span class="nm">${esc(s.name)}<span class="sub">${yen(s.price)}${s.lunch === '1' ? ' ランチ' : ''}</span></span>
       <span class="wk">${right}</span></button></li>`;
   }).join('');
