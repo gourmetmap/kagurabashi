@@ -21,16 +21,17 @@
     --sub: #6E6E6A;
     --rule: #DEDEDA;
     --on-black: #C9C9C5;
-    /* star ramp: light -> deep red (ordinal). Digit on the pin is the secondary encoding. */
+    /* star ramp: light -> deep red (ordinal). The digit on the pin is the secondary encoding. */
     --s1: #F0A08A;
     --s2: #E8694A;
     --s3: #E23E14;
     --s4: #A92C0C;
     --s5: #5E1604;
-    --bar: #FFFFFF;
+    --s0: #FFFFFF;
     --safe-b: env(safe-area-inset-bottom, 0px);
+    --header-h: 70px;
   }
-  * { box-sizing: border-box; border-radius: 0 !important; }
+  * { box-sizing: border-box; border-radius: 0 !important; -webkit-tap-highlight-color: transparent; }
   html, body { margin: 0; height: 100%; background: var(--white); color: var(--text); }
   body {
     font-family: "Noto Sans JP", "Noto Sans CJK JP", sans-serif;
@@ -39,7 +40,8 @@
     -webkit-text-size-adjust: 100%;
     overflow: hidden;
   }
-  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  button, select, input { font: inherit; color: inherit; }
+  button { background: none; border: 0; padding: 0; cursor: pointer; }
   a { color: inherit; }
 
   /* ---------- header ---------- */
@@ -48,29 +50,39 @@
     background: var(--black); color: var(--white);
     padding: calc(env(safe-area-inset-top, 0px) + 6px) 0 0;
   }
-  .title-row { display: flex; align-items: baseline; gap: 8px; padding: 0 12px 5px; }
+  .title-row { display: flex; align-items: center; gap: 8px; padding: 0 12px 6px; }
+  .title-row .genre { margin-left: auto; }
   h1 { margin: 0; font-size: 16px; font-weight: 900; letter-spacing: -0.02em; white-space: nowrap; }
-  .count { font-size: 11px; font-weight: 700; color: var(--on-black); letter-spacing: 0.1em; }
-  .chips {
-    display: flex; gap: 5px; overflow-x: auto; padding: 0 12px 7px;
+  .count { font-size: 12px; font-weight: 700; color: var(--on-black); letter-spacing: 0.04em; white-space: nowrap; }
+  .count b { color: var(--white); font-weight: 900; }
+  .filters {
+    display: flex; gap: 4px; overflow-x: auto; padding: 0 12px 7px;
     scrollbar-width: none; -webkit-overflow-scrolling: touch;
   }
-  .chips::-webkit-scrollbar { display: none; }
+  .filters::-webkit-scrollbar { display: none; }
   .chip {
     flex: 0 0 auto; display: flex; align-items: center; gap: 5px;
-    height: 30px; padding: 0 10px; font-size: 13px; font-weight: 700;
+    height: 32px; padding: 0 8px; font-size: 13px; font-weight: 700;
     background: var(--white); color: var(--black); white-space: nowrap;
   }
+  .filters .chip { flex: 1 0 auto; justify-content: center; gap: 4px; padding: 0 5px; }
+  .filters .sw { width: 10px; height: 10px; }
   .chip[aria-pressed="false"] { background: transparent; color: var(--on-black); box-shadow: inset 0 0 0 1px #3a3a3e; }
-  .chip[aria-pressed="false"] .sw { opacity: .35; }
   .sw { width: 12px; height: 12px; outline: 1.5px solid var(--black); outline-offset: -1.5px; }
-  .chip[aria-pressed="false"] .sw { outline-color: var(--on-black); }
+  .chip[aria-pressed="false"] .sw { opacity: .35; outline-color: var(--on-black); }
+  .genre {
+    flex: 0 1 auto; min-width: 0; max-width: 46vw; height: 30px; padding: 0 24px 0 9px; border: 0;
+    font-size: 13px; font-weight: 700; color: var(--black);
+    background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0h10L5 6z' fill='%23111114'/%3E%3C/svg%3E") no-repeat right 9px center;
+    -webkit-appearance: none; appearance: none;
+  }
+  .genre.on { background-color: var(--red); color: var(--white);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0h10L5 6z' fill='%23ffffff'/%3E%3C/svg%3E"); }
 
   /* ---------- map ---------- */
   #map { position: fixed; inset: 0; z-index: 1; background: #F2EFE9; }
   .leaflet-control-attribution { font-size: 10px; }
   .leaflet-tile-pane { filter: grayscale(1) contrast(.9); opacity: .6; }
-  .leaflet-top { top: var(--header-h, 100px); }
 
   .pin {
     display: flex; align-items: center; justify-content: center;
@@ -81,96 +93,112 @@
   }
   .pin.dark-digit { color: var(--black); }
   .pin.light-digit { color: var(--white); }
-  .pin.bar { font-size: 11px; color: var(--black); }
   .z-far .pin-wrap:not(.selected) .pin { transform: scale(.62); font-size: 0; }
   .z-mid .pin-wrap:not(.selected) .pin { transform: scale(.8); }
   .pin-wrap.selected .pin { transform: scale(1.35); box-shadow: 0 0 0 3px var(--white), 0 0 0 5px var(--black); }
 
-  /* ---------- floating buttons ---------- */
+  /* ---------- floating ---------- */
   .fabs {
-    position: fixed; right: 12px; bottom: calc(24px + var(--safe-b)); z-index: 900;
+    position: fixed; right: 12px; bottom: calc(20px + var(--safe-b)); z-index: 900;
     display: flex; flex-direction: column; gap: 8px;
   }
   .fab {
-    height: 44px; min-width: 44px; padding: 0 14px;
+    height: 46px; min-width: 64px; padding: 0 14px;
     background: var(--black); color: var(--white);
     font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
   }
   .fab.light { background: var(--white); color: var(--black); box-shadow: inset 0 0 0 2px var(--black); }
-
-  /* ---------- bottom sheet ---------- */
-  .sheet {
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 1100;
-    max-height: 78vh; overflow-y: auto; -webkit-overflow-scrolling: touch;
-    background: var(--white);
-    border-top: 3px solid var(--black);
-    padding: 8px 16px calc(20px + var(--safe-b));
-    transform: translateY(105%); transition: transform .22s ease-out;
-  }
-  .sheet.open { transform: translateY(0); }
-  .sheet-top { display: flex; justify-content: space-between; align-items: center; height: 36px; }
-  .stars { color: var(--red); font-size: 18px; letter-spacing: 0.08em; font-weight: 700; }
-  .stars .off { color: var(--rule); }
-  .norate { color: var(--sub); font-size: 13px; font-weight: 700; letter-spacing: 0.06em; }
-  .close { width: 44px; height: 44px; margin-right: -12px; font-size: 22px; font-weight: 500; color: var(--black); }
-  .shop { margin: 2px 0 10px; font-size: 22px; font-weight: 900; letter-spacing: -0.02em; line-height: 1.3; color: var(--black); }
-  .facts { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0 0 12px; font-size: 13px; font-weight: 700; color: var(--black); }
-  .facts span { white-space: nowrap; }
-  .facts .k { color: var(--sub); font-weight: 500; margin-right: 4px; }
-  .comment { margin: 0 0 14px; font-size: 15px; line-height: 1.75; color: var(--text); white-space: pre-line; }
-  .addr { margin: 0 0 16px; font-size: 12px; color: var(--sub); }
-  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .btn {
-    display: flex; align-items: center; justify-content: center;
-    height: 48px; font-size: 14px; font-weight: 700; text-decoration: none; letter-spacing: 0.04em;
-  }
-  .btn.primary { background: var(--black); color: var(--white); grid-column: 1 / -1; }
-  .btn.secondary { background: var(--white); color: var(--black); box-shadow: inset 0 0 0 2px var(--black); }
-  .embed { margin-top: 16px; }
-  .embed iframe { width: 100%; height: 560px; border: 0; display: block; background: var(--white); }
-  .posted { margin-top: 14px; font-size: 11px; color: var(--sub); letter-spacing: 0.1em; }
-
-  /* ---------- list panel ---------- */
-  .list {
-    position: fixed; inset: 0; z-index: 1200; background: var(--white);
-    display: none; flex-direction: column;
-  }
-  .list.open { display: flex; }
-  .list-head {
-    display: flex; align-items: center; justify-content: space-between;
-    background: var(--black); color: var(--white);
-    padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px;
-  }
-  .list-head h2 { margin: 0; font-size: 16px; font-weight: 900; letter-spacing: -0.02em; }
-  .list-head .close { color: var(--white); }
-  .sort { display: flex; gap: 6px; padding: 10px 16px; }
-  .sort .chip { box-shadow: inset 0 0 0 1px var(--rule); }
-  .sort .chip[aria-pressed="true"] { background: var(--black); color: var(--white); box-shadow: none; }
-  .sort .chip[aria-pressed="false"] { color: var(--sub); }
-  .rows { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 16px calc(24px + var(--safe-b)); margin: 0; list-style: none; }
-  .row { display: grid; grid-template-columns: 28px 1fr auto; gap: 12px; align-items: center; width: 100%; text-align: left; padding: 14px 0; }
-  .row + .row { border-top: 1px solid var(--rule); }
-  .row .sq { width: 28px; height: 28px; font-size: 13px; }
-  .row .nm { font-size: 15px; font-weight: 700; color: var(--black); line-height: 1.35; }
-  .row .sub { display: block; font-size: 12px; font-weight: 500; color: var(--sub); margin-top: 2px; }
-  .row .wk { font-size: 12px; color: var(--sub); white-space: nowrap; }
-  .empty { padding: 40px 0; text-align: center; color: var(--sub); font-size: 14px; }
-
-  .note { position: fixed; left: 12px; bottom: calc(24px + var(--safe-b)); z-index: 900; margin: 0;
+  .note { position: fixed; left: 12px; bottom: calc(20px + var(--safe-b)); z-index: 900; margin: 0;
           font-size: 11px; line-height: 1.6; color: var(--sub); background: var(--white); padding: 6px 8px; }
   .note a { color: var(--black); font-weight: 700; text-decoration: none; }
-  /* first-visit hint: tells people what to do without reading anything */
   .hint {
-    position: fixed; left: 50%; top: calc(var(--header-h, 70px) + 12px); transform: translateX(-50%);
+    position: fixed; left: 50%; top: calc(var(--header-h) + 12px); transform: translateX(-50%);
     z-index: 950; background: var(--black); color: var(--white);
     font-size: 13px; font-weight: 700; padding: 9px 14px; white-space: nowrap;
     transition: opacity .4s; pointer-events: none;
   }
   .hint.gone { opacity: 0; }
 
+  /* ---------- detail sheet ---------- */
+  .sheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 1100;
+    max-height: calc(100% - var(--header-h) - 8px); overflow-y: auto; -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    background: var(--white);
+    border-top: 3px solid var(--black);
+    padding: 0 0 calc(18px + var(--safe-b));
+    transform: translateY(105%); transition: transform .22s ease-out;
+  }
+  .sheet.open { transform: translateY(0); }
+  .sheet.dragging { transition: none; }
+  .grab { position: sticky; top: 0; z-index: 2; height: 22px; background: var(--white); display: flex; justify-content: center; align-items: center; touch-action: none; }
+  .grab::before { content: ""; width: 40px; height: 4px; background: var(--rule); }
+  .photo {
+    position: relative; display: block; width: 100%; background: var(--black);
+    height: min(36vh, 125vw); cursor: zoom-in; touch-action: pan-y;
+  }
+  .photo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .photo .zoom { position: absolute; right: 8px; bottom: 8px; background: rgba(17,17,20,.8); color: var(--white); font-size: 11px; font-weight: 700; padding: 4px 8px; letter-spacing: .06em; }
+  .body { padding: 12px 16px 0; }
+  .sheet-top { display: flex; justify-content: space-between; align-items: center; min-height: 28px; }
+  .stars { color: var(--red); font-size: 18px; letter-spacing: 0.08em; font-weight: 700; }
+  .stars .off { color: var(--rule); }
+  .norate { color: var(--sub); font-size: 13px; font-weight: 700; letter-spacing: 0.04em; }
+  .close { width: 44px; height: 44px; margin: -8px -12px -8px 0; font-size: 22px; font-weight: 500; color: var(--black); }
+  .shop { margin: 2px 0 8px; font-size: 22px; font-weight: 900; letter-spacing: -0.02em; line-height: 1.3; color: var(--black); }
+  .facts { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0 0 12px; font-size: 13px; font-weight: 700; color: var(--black); }
+  .facts .k { color: var(--sub); font-weight: 500; margin-right: 4px; }
+  .comment { margin: 0 0 12px; font-size: 15px; line-height: 1.75; color: var(--text); white-space: pre-line; }
+  .addr { margin: 0 0 14px; font-size: 12px; color: var(--sub); }
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .btn {
+    display: flex; align-items: center; justify-content: center;
+    height: 48px; font-size: 14px; font-weight: 700; text-decoration: none; letter-spacing: 0.04em;
+  }
+  .btn.primary { background: var(--black); color: var(--white); }
+  .btn.secondary { background: var(--white); color: var(--black); box-shadow: inset 0 0 0 2px var(--black); }
+  .posted { margin-top: 12px; font-size: 11px; color: var(--sub); letter-spacing: 0.1em; }
+
+  /* ---------- photo lightbox ---------- */
+  .lightbox { position: fixed; inset: 0; z-index: 1300; background: var(--black); display: none; align-items: center; justify-content: center; }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .lightbox .close { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 8px); right: 16px; margin: 0; color: var(--white); background: rgba(17,17,20,.6); }
+
+  /* ---------- list panel ---------- */
+  .list { position: fixed; inset: 0; z-index: 1200; background: var(--white); display: none; flex-direction: column; }
+  .list.open { display: flex; }
+  .list-head {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--black); color: var(--white);
+    padding: calc(env(safe-area-inset-top, 0px) + 6px) 16px 6px;
+  }
+  .list-head h2 { margin: 0; font-size: 16px; font-weight: 900; letter-spacing: -0.02em; }
+  .list-head .close { color: var(--white); margin: 0 -12px 0 0; }
+  .tools { padding: 10px 16px 6px; display: grid; gap: 8px; }
+  .search { height: 40px; width: 100%; padding: 0 12px; border: 0; box-shadow: inset 0 0 0 2px var(--black); font-size: 16px; font-weight: 500; background: var(--white); }
+  .search::placeholder { color: var(--sub); }
+  .sort { display: flex; gap: 6px; }
+  .sort .chip { height: 32px; box-shadow: inset 0 0 0 1px var(--rule); }
+  .sort .chip[aria-pressed="true"] { background: var(--black); color: var(--white); box-shadow: none; }
+  .sort .chip[aria-pressed="false"] { color: var(--sub); background: var(--white); }
+  .rows { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 16px calc(24px + var(--safe-b)); margin: 0; list-style: none; }
+  .row { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: center; width: 100%; text-align: left; padding: 10px 0; }
+  .rows li + li .row { border-top: 1px solid var(--rule); }
+  .thumb { position: relative; width: 56px; height: 70px; background: var(--black); }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .thumb .pin { position: absolute; left: -4px; top: -4px; width: 24px; height: 24px; font-size: 12px; }
+  .row .nm { font-size: 15px; font-weight: 700; color: var(--black); line-height: 1.35; }
+  .row .sub { display: block; font-size: 12px; font-weight: 500; color: var(--sub); margin-top: 3px; }
+  .empty { padding: 40px 0; text-align: center; color: var(--sub); font-size: 14px; }
+
   @media (min-width: 768px) {
-    .sheet { left: auto; right: 16px; bottom: 16px; width: 400px; max-height: calc(100vh - var(--header-h, 100px) - 32px); border: 3px solid var(--black); }
+    .filters .chip { flex: 0 0 auto; padding: 0 10px; }
+    .title-row .genre { margin-left: 16px; }
+    .sheet { left: auto; right: 16px; bottom: 16px; width: 400px; max-height: calc(100% - var(--header-h) - 32px); border: 3px solid var(--black); padding-bottom: 18px; }
     .sheet:not(.open) { transform: translateX(120%); }
+    .grab { display: none; }
+    .photo { height: 360px; }
     .fabs { right: 16px; bottom: 16px; }
     .sheet.open ~ .fabs { right: 432px; }
     .list { left: auto; width: 420px; border-left: 3px solid var(--black); }
@@ -181,19 +209,19 @@
 
 <header id="header">
   <div class="title-row">
-    <h1>神楽坂/飯田橋グルメ MAP</h1>
+    <h1>神楽坂/飯田橋グルメ</h1>
     <span class="count" id="count"></span>
+    <select class="genre" id="genre" aria-label="ジャンルで絞り込み"></select>
   </div>
-  <div class="chips" id="chips" role="group" aria-label="星の数で絞り込み"></div>
+  <div class="filters" id="filters" role="group" aria-label="星の数で絞り込み"></div>
 </header>
 
 <div id="map" aria-label="お店の地図"></div>
 
 <p class="note"><a href="https://www.instagram.com/kagurabashi_gourmet/" target="_blank" rel="noopener">@kagurabashi_gourmet</a><br>星は料理の味のみで評価</p>
-
 <div class="hint" id="hint">ピンをタップするとお店の詳細が出ます</div>
 
-<section class="sheet" id="sheet" aria-live="polite" aria-hidden="true"></section>
+<section class="sheet" id="sheet" aria-hidden="true"></section>
 
 <div class="fabs">
   <button class="fab" id="btn-list">一覧</button>
@@ -205,21 +233,31 @@
     <h2 id="list-title">お店一覧</h2>
     <button class="close" id="list-close" aria-label="一覧を閉じる">✕</button>
   </div>
-  <div class="sort" role="group" aria-label="並び順">
-    <button class="chip" data-sort="stars" aria-pressed="true">星の多い順</button>
-    <button class="chip" data-sort="date" aria-pressed="false">新しい順</button>
-    <button class="chip" data-sort="near" aria-pressed="false">近い順</button>
+  <div class="tools">
+    <input class="search" id="search" type="search" placeholder="店名で探す" autocomplete="off">
+    <div class="sort" role="group" aria-label="並び順">
+      <button class="chip" data-sort="stars" aria-pressed="true">星の多い順</button>
+      <button class="chip" data-sort="date" aria-pressed="false">新しい順</button>
+      <button class="chip" data-sort="near" aria-pressed="false">近い順</button>
+    </div>
   </div>
   <ul class="rows" id="rows"></ul>
 </section>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-label="写真">
+  <img id="lightbox-img" alt="">
+  <button class="close" id="lightbox-close" aria-label="写真を閉じる">✕</button>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 // ===== settings =====
 // To manage data in Google Sheets later, publish the sheet as CSV and put that URL here.
 const DATA_URL = 'data.csv';
+const IMG = code => `img/${code}.jpg`;
 const IG_POST = code => `https://www.instagram.com/p/${code}/`;
 const CENTER = [35.7022, 139.7405];
+const GENRES = ['ラーメン', '和食', '居酒屋', '焼き鳥', '焼肉', '中華', 'アジア・エスニック', 'カレー', 'イタリアン', 'フレンチ', '洋食・その他', 'バー'];
 
 const TIERS = [
   { key: '5', label: '★5', color: 'var(--s5)', digit: 'light-digit' },
@@ -227,11 +265,12 @@ const TIERS = [
   { key: '3', label: '★3', color: 'var(--s3)', digit: 'light-digit' },
   { key: '2', label: '★2', color: 'var(--s2)', digit: 'dark-digit' },
   { key: '1', label: '★1', color: 'var(--s1)', digit: 'dark-digit' },
-  { key: 'bar', label: '★対象外', color: 'var(--bar)', digit: 'bar' },
+  { key: '0', label: '★対象外', color: 'var(--s0)', digit: 'dark-digit' },
 ];
 const NO_RATE_MARK = '−';
-const tierOf = s => s.stars ? String(s.stars) : 'bar';
+const tierOf = s => String(s.stars || 0);
 const tierInfo = k => TIERS.find(t => t.key === k);
+const mark = s => s.stars || NO_RATE_MARK;
 
 // ===== CSV (handles quoted fields with newlines) =====
 function parseCSV(text) {
@@ -255,14 +294,16 @@ function parseCSV(text) {
 }
 
 // ===== state =====
-const active = new Set(TIERS.map(t => t.key));
-let shops = [], selected = null, sortKey = 'stars', here = null;
+const activeTiers = new Set(TIERS.map(t => t.key));
+let genre = '';
+let shops = [], selected = null, sortKey = 'stars', here = null, query = '';
 
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const yen = n => n ? `〜${Number(n).toLocaleString('ja-JP')}円` : '';
+const $ = id => document.getElementById(id);
 
 // ===== map =====
-const map = L.map('map', { zoomControl: false, attributionControl: true }).setView(CENTER, 16);
+const map = L.map('map', { zoomControl: false }).setView(CENTER, 16);
 // GSI (Geospatial Information Authority of Japan) pale map: Japanese labels, free with attribution
 L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
   maxZoom: 19, maxNativeZoom: 18,
@@ -272,162 +313,235 @@ L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
 function pinIcon(s, isSel) {
   const t = tierInfo(tierOf(s));
   const size = s.stars >= 5 ? 30 : s.stars >= 4 ? 28 : 26;
-  const txt = s.stars ? s.stars : NO_RATE_MARK;
   return L.divIcon({
     className: 'pin-wrap' + (isSel ? ' selected' : ''),
-    html: `<div class="pin ${t.digit}" style="background:${t.color}">${txt}</div>`,
+    html: `<div class="pin ${t.digit}" style="background:${t.color}">${mark(s)}</div>`,
     iconSize: [size, size], iconAnchor: [size / 2, size / 2],
   });
 }
 
+// shrink pins when zoomed out so the dense Kagurazaka strip stays readable
+function zoomClass() {
+  const z = map.getZoom(), el = map.getContainer();
+  el.classList.toggle('z-far', z <= 14);
+  el.classList.toggle('z-mid', z === 15 || z === 16);
+}
+map.on('zoomend', zoomClass);
+zoomClass();
+
 function setHeaderOffset() {
-  const h = document.getElementById('header').offsetHeight;
-  document.documentElement.style.setProperty('--header-h', h + 'px');
+  document.documentElement.style.setProperty('--header-h', $('header').offsetHeight + 'px');
   map.invalidateSize();
 }
 
 // ===== filters =====
-function renderChips() {
-  const box = document.getElementById('chips');
-  box.innerHTML = TIERS.map(t => {
-    const n = shops.filter(s => tierOf(s) === t.key).length;
-    return `<button class="chip" data-k="${t.key}" aria-pressed="${active.has(t.key)}">
-      <span class="sw" style="background:${t.color}"></span>${t.label}<span style="font-weight:500">${n}</span></button>`;
-  }).join('');
+function renderFilters() {
+  const sel = $('genre');
+  sel.innerHTML = `<option value="">全ジャンル</option>` +
+    GENRES.filter(g => shops.some(s => s.genre === g)).map(g => `<option value="${g}">${g}</option>`).join('');
+  sel.onchange = () => { genre = sel.value; sel.classList.toggle('on', !!genre); applyFilter(); fitVisible(); };
+  const box = $('filters');
+  box.insertAdjacentHTML('beforeend', TIERS.map(t =>
+    `<button class="chip" data-k="${t.key}" aria-pressed="true"><span class="sw" style="background:${t.color}"></span>${t.label}</button>`).join(''));
   box.querySelectorAll('.chip').forEach(b => b.onclick = () => {
     const k = b.dataset.k;
-    active.has(k) ? active.delete(k) : active.add(k);
-    if (active.size === 0) TIERS.forEach(t => active.add(t.key)); // never leave the map empty
+    activeTiers.has(k) ? activeTiers.delete(k) : activeTiers.add(k);
+    if (activeTiers.size === 0) TIERS.forEach(t => activeTiers.add(t.key)); // never leave the map empty
     applyFilter();
   });
 }
 
-function visible() { return shops.filter(s => active.has(tierOf(s))); }
+const passes = s => activeTiers.has(tierOf(s)) && (!genre || s.genre === genre);
+const visible = () => shops.filter(passes);
 
 function applyFilter() {
   shops.forEach(s => {
-    const on = active.has(tierOf(s));
+    const on = passes(s);
     if (on && !map.hasLayer(s.marker)) s.marker.addTo(map);
     if (!on && map.hasLayer(s.marker)) s.marker.remove();
   });
-  document.querySelectorAll('#chips .chip').forEach(b => b.setAttribute('aria-pressed', active.has(b.dataset.k)));
-  document.getElementById('count').textContent = `${visible().length}軒`;
-  if (selected && !active.has(tierOf(selected))) closeSheet();
-  renderList();
+  $('filters').querySelectorAll('.chip').forEach(b => b.setAttribute('aria-pressed', activeTiers.has(b.dataset.k)));
+  $('count').innerHTML = `<b>${visible().length}</b>軒/${shops.length}軒`;
+  if (selected && !passes(selected)) hideSheet();
+  if (list.classList.contains('open')) renderList();
 }
 
+// After a genre change, frame the matching pins. Far-away outliers (Azabu, Daikanyama...) are left out
+// so the view stays on the neighbourhood.
+function fitVisible() {
+  const v = visible();
+  if (!v.length) return;
+  const near = v.filter(s => Math.hypot((s.lat - CENTER[0]) * 111, (s.lng - CENTER[1]) * 90.5) < 2.5);
+  const pts = (near.length ? near : v).map(s => [s.lat, s.lng]);
+  const top = $('header').offsetHeight + 16;
+  map.flyToBounds(pts, { paddingTopLeft: [24, top], paddingBottomRight: [24, 90], maxZoom: 17, duration: 0.5 });
+}
+
+// ===== back button: sheet / list / lightbox each take one history entry =====
+function pushLayer(name, extra = {}) {
+  const st = history.state || {};
+  if (st.layer === name) history.replaceState({ ...extra, layer: name }, '', extra.hash ?? location.hash);
+  else history.pushState({ ...extra, layer: name }, '', extra.hash ?? location.hash);
+}
+function popLayer(name) {
+  if ((history.state || {}).layer === name) history.back();
+}
+addEventListener('popstate', () => {
+  const st = history.state || {};
+  if (st.layer !== 'lightbox') hideLightbox();
+  if (st.layer !== 'list' && st.layer !== 'lightbox') hideList();
+  if (st.layer === 'sheet' || st.layer === 'lightbox') {
+    const s = shops.find(x => x.code === st.code);
+    if (s && selected !== s) showSheet(s, { pan: false });
+  } else hideSheet();
+});
+
 // ===== detail sheet =====
-const sheet = document.getElementById('sheet');
+const sheet = $('sheet');
 
 function starHTML(n) {
   if (!n) return `<span class="norate">★対象外(ドリンク中心のお店)</span>`;
   return `<span class="stars" aria-label="星${n}つ">${'★'.repeat(n)}<span class="off">${'★'.repeat(5 - n)}</span></span>`;
 }
 
-function walkHTML(s) {
-  const out = [];
-  if (s.walk_kagurazaka) out.push(`<span><span class="k">神楽坂駅</span>徒歩約${s.walk_kagurazaka}分</span>`);
-  if (s.walk_iidabashi) out.push(`<span><span class="k">飯田橋駅</span>徒歩約${s.walk_iidabashi}分</span>`);
-  return out.join('');
-}
-
-function hideHint() { document.getElementById('hint').classList.add('gone'); }
+function hideHint() { $('hint').classList.add('gone'); }
 setTimeout(hideHint, 5000);
 
-function openSheet(s, { pan = true } = {}) {
+function openSheet(s) {
+  showSheet(s);
+  pushLayer('sheet', { code: s.code, hash: '#' + s.code });
+}
+
+function showSheet(s, { pan = true } = {}) {
   hideHint();
-  if (selected) selected.marker.setIcon(pinIcon(selected, false));
+  if (selected) { selected.marker.setIcon(pinIcon(selected, false)); selected.marker.setZIndexOffset(selected.z); }
   selected = s;
   s.marker.setIcon(pinIcon(s, true));
   s.marker.setZIndexOffset(10000);
   const gmap = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.name + ' ' + s.address)}`;
   sheet.innerHTML = `
-    <div class="sheet-top">${starHTML(s.stars)}<button class="close" id="sheet-close" aria-label="閉じる">✕</button></div>
-    <h2 class="shop">${esc(s.name)}</h2>
-    <div class="facts">
-      ${s.price ? `<span><span class="k">予算</span>${yen(s.price)}${s.lunch === '1' ? '(ランチ)' : ''}</span>` : (s.lunch === '1' ? '<span>ランチ</span>' : '')}
-      ${walkHTML(s)}
-    </div>
-    ${s.comment ? `<p class="comment">${esc(s.comment)}</p>` : ''}
-    <p class="addr">${esc(s.address)}</p>
-    <div class="actions">
-      <a class="btn primary" href="${IG_POST(s.code)}" target="_blank" rel="noopener">Instagramで投稿を見る</a>
-      <a class="btn secondary" href="${gmap}" target="_blank" rel="noopener">Googleマップ</a>
-      <button class="btn secondary" id="btn-photo">写真を表示</button>
-    </div>
-    <div class="embed" id="embed"></div>
-    <div class="posted">投稿日 ${s.date.replace(/-/g, '.')}</div>`;
+    <div class="grab" id="grab"></div>
+    <button class="photo" id="photo" aria-label="写真を拡大">
+      <img src="${IMG(s.code)}" alt="${esc(s.name)} の写真" decoding="async">
+      <span class="zoom">タップで拡大</span>
+    </button>
+    <div class="body">
+      <div class="sheet-top">${starHTML(s.stars)}<button class="close" id="sheet-close" aria-label="閉じる">✕</button></div>
+      <h2 class="shop">${esc(s.name)}</h2>
+      <div class="facts">
+        <span>${esc(s.genre)}</span>
+        ${s.price ? `<span><span class="k">予算</span>${yen(s.price)}${s.lunch === '1' ? '(ランチ)' : ''}</span>` : (s.lunch === '1' ? '<span>ランチ</span>' : '')}
+      </div>
+      ${s.comment ? `<p class="comment">${esc(s.comment)}</p>` : ''}
+      <p class="addr">${esc(s.address)}</p>
+      <div class="actions">
+        <a class="btn primary" href="${IG_POST(s.code)}" target="_blank" rel="noopener">投稿を見る</a>
+        <a class="btn secondary" href="${gmap}" target="_blank" rel="noopener">Googleマップ</a>
+      </div>
+      <div class="posted">投稿日 ${s.date.replace(/-/g, '.')}</div>
+    </div>`;
   sheet.classList.add('open');
   sheet.setAttribute('aria-hidden', 'false');
   sheet.scrollTop = 0;
-  document.getElementById('sheet-close').onclick = closeSheet;
-  document.getElementById('btn-photo').onclick = e => {
-    e.target.remove();
-    document.getElementById('embed').innerHTML =
-      `<iframe src="${IG_POST(s.code)}embed/" loading="lazy" title="${esc(s.name)} の投稿"></iframe>`;
-  };
-  history.replaceState(null, '', '#' + s.code);
+  $('sheet-close').onclick = closeSheet;
+  $('photo').onclick = () => openLightbox(s);
+  enableSwipeDown();
   if (pan) {
-    // keep the pin visible above the sheet on phones
-    const mobile = innerWidth < 768;
+    // put the pin in the middle of the map strip left visible between header and sheet
     const z = Math.max(map.getZoom(), 17);
     const pt = map.project([s.lat, s.lng], z);
-    if (mobile) pt.y += sheet.offsetHeight / 2 - 40;
+    if (innerWidth < 768) {
+      const top = $('header').offsetHeight, bottom = innerHeight - sheet.offsetHeight;
+      pt.y += innerHeight / 2 - (top + Math.max(bottom, top + 60)) / 2;
+    }
     map.flyTo(map.unproject(pt, z), z, { duration: 0.4 });
   }
 }
 
-function closeSheet() {
+function hideSheet() {
   if (selected) { selected.marker.setIcon(pinIcon(selected, false)); selected.marker.setZIndexOffset(selected.z); }
   selected = null;
   sheet.classList.remove('open');
   sheet.setAttribute('aria-hidden', 'true');
-  history.replaceState(null, '', location.pathname + location.search);
 }
-map.on('click', closeSheet);
+function closeSheet() {
+  if ((history.state || {}).layer === 'sheet') history.back();
+  else { hideSheet(); history.replaceState(null, '', location.pathname + location.search); }
+}
+map.on('click', () => { if (selected) closeSheet(); });
 
-// shrink pins when zoomed out so the dense Kagurazaka strip stays readable
-function zoomClass() {
-  const z = map.getZoom(), el = map.getContainer();
-  el.classList.toggle('z-far', z <= 15);
-  el.classList.toggle('z-mid', z === 16);
+// swipe the sheet down (from the handle or the photo) to close it
+function enableSwipeDown() {
+  let y0 = null, dy = 0;
+  const start = e => { if (sheet.scrollTop > 0) return; y0 = e.touches[0].clientY; dy = 0; sheet.classList.add('dragging'); };
+  const move = e => {
+    if (y0 == null) return;
+    dy = Math.max(0, e.touches[0].clientY - y0);
+    sheet.style.transform = `translateY(${dy}px)`;
+  };
+  const end = () => {
+    if (y0 == null) return;
+    sheet.classList.remove('dragging');
+    sheet.style.transform = '';
+    if (dy > 90) closeSheet();
+    y0 = null;
+  };
+  ['grab', 'photo'].forEach(id => {
+    const el = $(id);
+    el.addEventListener('touchstart', start, { passive: true });
+    el.addEventListener('touchmove', move, { passive: true });
+    el.addEventListener('touchend', end);
+  });
 }
-map.on('zoomend', zoomClass);
-zoomClass();
+
+// ===== photo lightbox =====
+const lightbox = $('lightbox');
+function openLightbox(s) {
+  $('lightbox-img').src = IMG(s.code);
+  $('lightbox-img').alt = s.name + ' の写真';
+  lightbox.classList.add('open');
+  pushLayer('lightbox', { code: s.code });
+}
+function hideLightbox() { lightbox.classList.remove('open'); }
+lightbox.onclick = () => popLayer('lightbox');
 
 // ===== list =====
-const list = document.getElementById('list');
+const list = $('list');
 function distM(s) {
-  if (!here) return null;
-  return Math.hypot((s.lat - here[0]) * 111000, (s.lng - here[1]) * 90500);
+  const p = here || CENTER;
+  return Math.hypot((s.lat - p[0]) * 111000, (s.lng - p[1]) * 90500);
 }
 function renderList() {
-  let v = visible().slice();
+  const q = query.trim().toLowerCase();
+  let v = visible().filter(s => !q || s.name.toLowerCase().includes(q));
   if (sortKey === 'stars') v.sort((a, b) => (b.stars || 0) - (a.stars || 0) || b.date.localeCompare(a.date));
   if (sortKey === 'date') v.sort((a, b) => b.date.localeCompare(a.date));
-  if (sortKey === 'near') v.sort((a, b) => (distM(a) ?? Math.hypot(a.lat - CENTER[0], a.lng - CENTER[1]) * 1e5) - (distM(b) ?? Math.hypot(b.lat - CENTER[0], b.lng - CENTER[1]) * 1e5));
-  document.getElementById('list-title').textContent = `お店一覧 ${v.length}軒`;
-  const ul = document.getElementById('rows');
+  if (sortKey === 'near') v.sort((a, b) => distM(a) - distM(b));
+  $('list-title').textContent = `お店一覧 ${v.length}軒`;
+  const ul = $('rows');
   if (!v.length) { ul.innerHTML = '<li class="empty">該当するお店がありません</li>'; return; }
   ul.innerHTML = v.map(s => {
     const t = tierInfo(tierOf(s));
-    const d = distM(s);
-    const right = d != null ? `${d < 1000 ? Math.round(d / 10) * 10 + 'm' : (d / 1000).toFixed(1) + 'km'}`
-      : (s.walk_kagurazaka || s.walk_iidabashi ? `徒歩${Math.min(...[s.walk_kagurazaka, s.walk_iidabashi].filter(Boolean).map(Number))}分` : '');
+    const d = sortKey === 'near' ? distM(s) : null;
+    const dist = d == null ? '' : ` ・ ${d < 1000 ? Math.round(d / 10) * 10 + 'm' : (d / 1000).toFixed(1) + 'km'}`;
     return `<li><button class="row" data-code="${s.code}">
-      <span class="pin sq ${t.digit}" style="background:${t.color}">${s.stars || NO_RATE_MARK}</span>
-      <span class="nm">${esc(s.name)}<span class="sub">${yen(s.price)}${s.lunch === '1' ? ' ランチ' : ''}</span></span>
-      <span class="wk">${right}</span></button></li>`;
+      <span class="thumb"><img src="${IMG(s.code)}" alt="" loading="lazy" decoding="async">
+        <span class="pin ${t.digit}" style="background:${t.color}">${mark(s)}</span></span>
+      <span class="nm">${esc(s.name)}<span class="sub">${esc(s.genre)}${s.price ? ' ・ ' + yen(s.price) : ''}${dist}</span></span>
+    </button></li>`;
   }).join('');
   ul.querySelectorAll('.row').forEach(b => b.onclick = () => {
-    closeList();
-    openSheet(shops.find(s => s.code === b.dataset.code));
+    const s = shops.find(x => x.code === b.dataset.code);
+    hideList();
+    showSheet(s);
+    history.replaceState({ layer: 'sheet', code: s.code }, '', '#' + s.code);
   });
 }
-function openList() { renderList(); list.classList.add('open'); list.setAttribute('aria-hidden', 'false'); }
-function closeList() { list.classList.remove('open'); list.setAttribute('aria-hidden', 'true'); }
-document.getElementById('btn-list').onclick = openList;
-document.getElementById('list-close').onclick = closeList;
+function openList() { renderList(); list.classList.add('open'); list.setAttribute('aria-hidden', 'false'); pushLayer('list'); }
+function hideList() { list.classList.remove('open'); list.setAttribute('aria-hidden', 'true'); }
+$('btn-list').onclick = openList;
+$('list-close').onclick = () => popLayer('list');
+$('search').oninput = e => { query = e.target.value; renderList(); };
 document.querySelectorAll('.sort .chip').forEach(b => b.onclick = () => {
   sortKey = b.dataset.sort;
   document.querySelectorAll('.sort .chip').forEach(x => x.setAttribute('aria-pressed', x === b));
@@ -444,10 +558,10 @@ function locate(fly = true) {
     if (!hereMarker) hereMarker = L.circleMarker(here, { radius: 8, color: '#FFFFFF', weight: 3, fillColor: '#111114', fillOpacity: 1 }).addTo(map);
     else hereMarker.setLatLng(here);
     if (fly) map.flyTo(here, 17, { duration: 0.5 });
-    renderList();
+    if (list.classList.contains('open')) renderList();
   }, () => alert('現在地を取得できませんでした'), { enableHighAccuracy: true, timeout: 8000 });
 }
-document.getElementById('btn-locate').onclick = () => locate(true);
+$('btn-locate').onclick = () => locate(true);
 
 // ===== boot =====
 fetch(DATA_URL, { cache: 'no-cache' }).then(r => r.text()).then(text => {
@@ -461,11 +575,12 @@ fetch(DATA_URL, { cache: 'no-cache' }).then(r => r.text()).then(text => {
     s.marker = L.marker([s.lat, s.lng], { icon: pinIcon(s, false), zIndexOffset: s.z, keyboard: true, title: s.name })
       .on('click', e => { L.DomEvent.stopPropagation(e); openSheet(s); });
   });
-  renderChips();
+  renderFilters();
   applyFilter();
   setHeaderOffset();
-  const code = location.hash.slice(1);
-  const hit = code && shops.find(s => s.code === code);
+  // deep link: .../#<post code> opens that shop
+  const hit = shops.find(s => s.code === location.hash.slice(1));
+  history.replaceState(null, '', location.pathname + location.search);
   if (hit) openSheet(hit);
 });
 addEventListener('resize', setHeaderOffset);
