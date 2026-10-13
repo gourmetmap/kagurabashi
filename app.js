@@ -215,6 +215,29 @@ function starHTML(n) {
   return `<span class="stars" aria-label="星${n}つ">${'★'.repeat(n)}<span class="off">${'★'.repeat(5 - n)}</span></span>`;
 }
 
+// ===== open Instagram in the app, not inside an in-app browser =====
+// Inside Instagram / LINE / Facebook in-app browsers, https://instagram.com links stay in that browser.
+// There we use the app's own scheme; Safari/Chrome keep the normal https link (universal links already open the app).
+const IN_APP_BROWSER = /Instagram|Line\/|FBAN|FBAV/i.test(navigator.userAgent) && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+// post shortcode → numeric media id (Instagram's base64 alphabet)
+function igMediaId(code) {
+  const A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+  let id = 0n;
+  for (const ch of code) id = id * 64n + BigInt(A.indexOf(ch));
+  return id.toString();
+}
+function openInstagramApp(e, appUrl, webUrl) {
+  if (!IN_APP_BROWSER) return; // normal link behaviour
+  e.preventDefault();
+  const t0 = Date.now();
+  location.href = appUrl;
+  // app not installed / scheme blocked → fall back to the web page
+  setTimeout(() => { if (!document.hidden && Date.now() - t0 < 3000) location.href = webUrl; }, 1200);
+}
+const IG_PROFILE = 'https://www.instagram.com/kagurabashi_gourmet/';
+const IG_PROFILE_APP = 'instagram://user?username=kagurabashi_gourmet';
+['ig-icon', 'ig-icon-list', 'ig-note'].forEach(id => $(id).addEventListener('click', e => openInstagramApp(e, IG_PROFILE_APP, IG_PROFILE)));
+
 // ===== share: copy a link that opens this shop =====
 // Instagram's paper-plane "share" glyph
 const SHARE_ICON = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="3" x2="9.218" y2="10.083"/><polygon points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334"/></svg>';
@@ -292,7 +315,10 @@ function showSheet(s, { pan = true } = {}) {
   $('sheet-close').onclick = closeSheet;
   $('sheet-share').onclick = () => copyShopLink(s);
   $('photo').onclick = () => { openLightbox(s); track('photo_zoom', { shop_name: s.name }); };
-  $('go-ig').onclick = () => track('instagram_click', { shop_name: s.name, stars: s.stars || 0 });
+  $('go-ig').onclick = e => {
+    track('instagram_click', { shop_name: s.name, stars: s.stars || 0 });
+    openInstagramApp(e, `instagram://media?id=${igMediaId(s.code)}`, IG_POST(s.code));
+  };
   $('go-gmap').onclick = () => track('gmap_click', { shop_name: s.name });
   enableSwipeDown();
   markActiveRow(s);
