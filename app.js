@@ -211,7 +211,7 @@ addEventListener('popstate', () => {
 const sheet = $('sheet');
 
 function starHTML(n) {
-  if (!n) return `<span class="norate">★対象外(ドリンク中心のお店)</span>`;
+  if (!n) return `<span class="norate">★対象外 (ドリンク中心のお店)</span>`;
   return `<span class="stars" aria-label="星${n}つ">${'★'.repeat(n)}<span class="off">${'★'.repeat(5 - n)}</span></span>`;
 }
 
@@ -276,7 +276,7 @@ function showSheet(s, { pan = true } = {}) {
       <h2 class="shop">${esc(s.name)}</h2>
       <div class="facts">
         ${s.bangai === '1' ? '<span class="tag">番外編</span>' : ''}<span>${esc(s.genre)}</span>
-        ${s.price ? `<span><span class="k">予算</span>${yen(s.price)}${s.lunch === '1' ? '(ランチ)' : ''}</span>` : (s.lunch === '1' ? '<span>ランチ</span>' : '')}
+        ${s.price ? `<span><span class="k">予算</span>${yen(s.price)}${s.lunch === '1' ? ' (ランチ)' : ''}</span>` : (s.lunch === '1' ? '<span>ランチ</span>' : '')}
       </div>
       ${s.comment ? `<p class="comment">${esc(s.comment)}</p>` : ''}
       <p class="addr">${esc(s.address)}</p>
