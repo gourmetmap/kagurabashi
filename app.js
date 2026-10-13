@@ -171,7 +171,7 @@ function applyFilter() {
   $('filters').querySelectorAll('.chip').forEach(b => b.setAttribute('aria-pressed', pickedTiers.has(b.dataset.k)));
   $('count').innerHTML = `<b>${visible().length}</b>軒/${shops.length}軒`;
   if (selected && !passes(selected)) hideSheet();
-  if (list.classList.contains('open')) renderList();
+  if (list.classList.contains('open') || isDesk()) renderList();
 }
 
 // After a genre change, frame the matching pins. Far-away outliers (Azabu, Daikanyama...) are left out
@@ -295,7 +295,15 @@ function showSheet(s, { pan = true } = {}) {
   $('go-ig').onclick = () => track('instagram_click', { shop_name: s.name, stars: s.stars || 0 });
   $('go-gmap').onclick = () => track('gmap_click', { shop_name: s.name });
   enableSwipeDown();
-  if (pan) {
+  markActiveRow(s);
+  if (pan === 'ifHidden') {
+    // PC list click: the map is visible next to the list, so only slide it when the pin is off-screen
+    const p = map.latLngToContainerPoint([s.lat, s.lng]), size = map.getSize();
+    const top = $('header').offsetHeight + 24, right = size.x - (isDesk() ? 440 : 0) - 24;
+    if (p.x < 24 || p.x > right || p.y < top || p.y > size.y - 24) {
+      map.panBy([p.x - (24 + right) / 2, p.y - (top + size.y - 24) / 2], { duration: 0.4 });
+    }
+  } else if (pan) {
     // put the pin in the middle of the map strip left visible between header and sheet
     const z = Math.max(map.getZoom(), 17);
     const pt = map.project([s.lat, s.lng], z);
@@ -314,6 +322,15 @@ function hideSheet() {
   selected = null;
   sheet.classList.remove('open');
   sheet.setAttribute('aria-hidden', 'true');
+  markActiveRow(null);
+}
+
+// PC: the open shop is highlighted in the docked list
+function markActiveRow(s) {
+  document.querySelectorAll('#rows .row.active').forEach(r => r.classList.remove('active'));
+  if (!s) return;
+  const r = document.querySelector(`#rows .row[data-code="${s.code}"]`);
+  if (r) { r.classList.add('active'); if (isDesk()) r.scrollIntoView({ block: 'nearest' }); }
 }
 function closeSheet() {
   if ((history.state || {}).layer === 'sheet') history.back();
@@ -393,15 +410,24 @@ function renderList() {
       <span class="nm">${s.bangai === '1' ? '<span class="tag">番外編</span>' : ''}${esc(s.name)}<span class="sub">${esc(s.genre)}${s.price ? ' ・ ' + yen(s.price) : ''}${dist}</span></span>
     </button></li>`;
   }).join('');
-  // Opening a shop from the list: don't move the map; ✕ / back returns to the list at the same scroll spot
-  ul.querySelectorAll('.row').forEach(b => b.onclick = () => {
+  ul.querySelectorAll('.row').forEach(b => {
     const s = shops.find(x => x.code === b.dataset.code);
-    listScroll = $('rows-wrap').scrollTop;
-    hideList();
-    showSheet(s, { pan: false });
-    trackShop(s, 'list');
-    history.pushState({ layer: 'sheet', code: s.code, fromList: true }, '', '#' + s.code);
+    if (selected === s) b.classList.add('active');
+    // PC: hovering a row lights up its pin on the map
+    b.onmouseenter = () => s.marker.getElement()?.classList.add('hl');
+    b.onmouseleave = () => s.marker.getElement()?.classList.remove('hl');
+    b.onclick = () => openFromList(s);
   });
+}
+// Phone: don't move the map; ✕ / back returns to the list at the same scroll spot.
+// PC: the list stays docked; the map only slides if the pin is off-screen.
+function openFromList(s) {
+  if (isDesk()) { openSheet(s, { pan: 'ifHidden', via: 'list' }); return; }
+  listScroll = $('rows-wrap').scrollTop;
+  hideList();
+  showSheet(s, { pan: false });
+  trackShop(s, 'list');
+  history.pushState({ layer: 'sheet', code: s.code, fromList: true }, '', '#' + s.code);
 }
 let listScroll = 0;
 function reopenList() {
@@ -410,7 +436,44 @@ function reopenList() {
   $('rows-wrap').scrollTop = listScroll;
 }
 function openList() { renderList(); list.classList.add('open'); list.setAttribute('aria-hidden', 'false'); pushLayer('list'); }
-function hideList() { list.classList.remove('open'); list.setAttribute('aria-hidden', 'true'); }
+function hideList() { list.classList.remove('open'); if (!isDesk()) list.setAttribute('aria-hidden', 'true'); }
+
+// ===== PC mode (≥1024px): docked list, hover tooltips, zoom buttons, keyboard =====
+const DESK_MQ = matchMedia('(min-width: 1024px)');
+function isDesk() { return DESK_MQ.matches; }
+let zoomCtl = null;
+function setTip(s, on) {
+  if (on && !s.marker.getTooltip()) {
+    const st = s.stars ? '★'.repeat(s.stars) : '★対象外';
+    s.marker.bindTooltip(`${esc(s.name)}<span class="t-st">${st}</span>`, { direction: 'top', offset: [0, -14], className: 'shop-tip' });
+  } else if (!on && s.marker.getTooltip()) s.marker.unbindTooltip();
+}
+function applyMode() {
+  const d = isDesk();
+  document.body.classList.toggle('desk', d);
+  list.setAttribute('aria-hidden', String(!(d || list.classList.contains('open'))));
+  $('search').placeholder = d ? '店名で探す( / キー)' : '店名で探す';
+  if (d && !zoomCtl) zoomCtl = L.control.zoom({ position: 'topleft', zoomInTitle: '拡大', zoomOutTitle: '縮小' }).addTo(map);
+  if (!d && zoomCtl) { zoomCtl.remove(); zoomCtl = null; }
+  shops.forEach(s => setTip(s, d));
+  if (d) renderList();
+  setHeaderOffset();
+}
+DESK_MQ.addEventListener('change', applyMode);
+
+addEventListener('keydown', e => {
+  const typing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || '');
+  if (e.key === 'Escape') {
+    if (lightbox.classList.contains('open')) popLayer('lightbox');
+    else if (infoPop.classList.contains('open')) popLayer('info');
+    else if (selected) closeSheet();
+    else if (!isDesk() && list.classList.contains('open')) popLayer('list');
+    else if (typing) document.activeElement.blur();
+  } else if (e.key === '/' && isDesk() && !typing) {
+    e.preventDefault();
+    $('search').focus();
+  }
+});
 $('btn-list').onclick = () => { openList(); track('list_open'); };
 $('ig-icon').onclick = () => track('profile_click', { from: 'header_icon' });
 $('ig-icon-list').onclick = () => track('profile_click', { from: 'list_icon' });
@@ -435,7 +498,7 @@ function locate(fly = true) {
     if (!hereMarker) hereMarker = L.circleMarker(here, { radius: 9, color: '#FFFFFF', weight: 3, fillColor: '#00B7FF', fillOpacity: 1 }).addTo(map);
     else hereMarker.setLatLng(here);
     if (fly) map.flyTo(here, 17, { duration: 0.5 });
-    if (list.classList.contains('open')) renderList();
+    if (list.classList.contains('open') || isDesk()) renderList();
   }, () => alert('現在地を取得できませんでした'), { enableHighAccuracy: true, timeout: 8000 });
 }
 $('btn-locate').onclick = () => locate(true);
@@ -454,6 +517,7 @@ fetch(DATA_URL, { cache: 'no-cache' }).then(r => r.text()).then(text => {
       .on('click', e => { L.DomEvent.stopPropagation(e); openSheet(s, { pan: false }); });
   });
   renderFilters();
+  applyMode();
   applyFilter();
   setHeaderOffset();
   fitStations();
