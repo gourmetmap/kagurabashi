@@ -395,6 +395,7 @@ function hideList() { list.classList.remove('open'); list.setAttribute('aria-hid
 $('btn-list').onclick = () => { openList(); track('list_open'); };
 $('ig-icon').onclick = () => track('profile_click', { from: 'header_icon' });
 $('ig-icon-list').onclick = () => track('profile_click', { from: 'list_icon' });
+$('ig-note').onclick = () => track('profile_click', { from: 'map_note' });
 $('list-close').onclick = () => popLayer('list');
 $('btn-map').onclick = () => popLayer('list');
 $('search').oninput = e => { query = e.target.value; renderList(); };
