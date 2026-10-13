@@ -8,7 +8,14 @@ const DATA_URL = 'data.csv';
 // Loaded from this file (not an inline snippet) so the page's CSP can forbid inline scripts.
 window.dataLayer = window.dataLayer || [];
 function gtag() { dataLayer.push(arguments); }
-if (GA_ID) {
+// Owner / test devices opt out: open the site once with #ga-off (undo with #ga-on)
+let gaOff = false;
+try {
+  if (location.hash === '#ga-off') localStorage.setItem('ga_off', '1');
+  if (location.hash === '#ga-on') localStorage.removeItem('ga_off');
+  gaOff = localStorage.getItem('ga_off') === '1';
+} catch (e) { /* storage blocked: keep analytics on */ }
+if (GA_ID && !gaOff) {
   const s = document.createElement('script');
   s.async = true;
   s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
@@ -17,7 +24,7 @@ if (GA_ID) {
   gtag('config', GA_ID);
 }
 // Custom events, e.g. track('instagram_click', { shop_name }) → GA4 "Events" report
-function track(name, params = {}) { if (GA_ID) gtag('event', name, params); }
+function track(name, params = {}) { if (GA_ID && !gaOff) gtag('event', name, params); }
 const IMG = code => `img/${code}.jpg`;
 const IG_POST = code => `https://www.instagram.com/p/${code}/`;
 const CENTER = [35.7022, 139.7405];
@@ -296,7 +303,9 @@ function showSheet(s, { pan = true } = {}) {
       const top = $('header').offsetHeight, bottom = innerHeight - sheet.offsetHeight;
       pt.y += innerHeight / 2 - (top + Math.max(bottom, top + 60)) / 2;
     }
-    map.flyTo(map.unproject(pt, z), z, { duration: 0.4 });
+    // shared links jump instantly (works even if the page was opened in a background tab)
+    if (pan === 'instant') map.setView(map.unproject(pt, z), z, { animate: false });
+    else map.flyTo(map.unproject(pt, z), z, { duration: 0.4 });
   }
 }
 
@@ -451,7 +460,7 @@ fetch(DATA_URL, { cache: 'no-cache' }).then(r => r.text()).then(text => {
   // deep link: .../#<post code> opens that shop
   const hit = shops.find(s => s.code === location.hash.slice(1));
   history.replaceState(null, '', location.pathname + location.search);
-  if (hit) openSheet(hit, { via: 'link' });
+  if (hit) openSheet(hit, { via: 'link', pan: 'instant' });
 });
 addEventListener('resize', setHeaderOffset);
 setHeaderOffset();

@@ -282,6 +282,17 @@
   .rows .ghead h3 { margin: 14px 0 2px; font-size: 13px; font-weight: 900; color: var(--black); letter-spacing: .02em; }
   .empty { padding: 40px 0; text-align: center; color: var(--sub); font-size: 14px; }
 
+  /* small phones (iPhone SE 1st gen etc.): keep star chips and ⓘ lines on one row */
+  @media (max-width: 359px) {
+    .filters { gap: 3px; padding: 0 8px 7px; }
+    .filters .chip { padding: 0 3px; gap: 3px; font-size: 11.5px; }
+    .filters .sw { width: 8px; height: 8px; }
+    .title-row { padding: 0 8px 6px; }
+    .info-list li { grid-template-columns: 20px 54px 1fr; gap: 5px; font-size: 12px; }
+    .info-list .st { font-size: 10.5px; }
+    .info-list .pin { width: 20px; height: 20px; font-size: 10px; }
+  }
+
   @media (min-width: 768px) {
     .filters .chip { flex: 0 0 auto; padding: 0 10px; }
     .title-row .genre { margin-left: 16px; }
@@ -380,6 +391,6 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjtwXFlh7CjE7ZJ+/vcRZRkIYIb6p4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="app.js?v=202610130925"></script>
+<script src="app.js?v=202610130932"></script>
 </body>
 </html>
