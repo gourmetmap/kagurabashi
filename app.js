@@ -108,7 +108,7 @@ function pinIcon(s, isSel) {
   const size = s.stars >= 5 ? 30 : s.stars >= 4 ? 28 : 26;
   return L.divIcon({
     className: 'pin-wrap' + (isSel ? ' selected' : ''),
-    html: `<div class="pin ${t.digit}" style="background:${t.color}">${mark(s)}</div>`,
+    html: `<div class="pin ${t.digit}${s.stars === 5 ? ' top' : ''}" style="background:${t.color}">${mark(s)}</div>`,
     iconSize: [size, size], iconAnchor: [size / 2, size / 2],
   });
 }
