@@ -196,6 +196,8 @@ addEventListener('popstate', () => {
     const s = shops.find(x => x.code === st.code);
     if (s && selected !== s) showSheet(s, { pan: false });
   } else hideSheet();
+  // back from a shop opened via the list → show the list again where it was
+  if (st.layer === 'list' && !list.classList.contains('open')) reopenList();
 });
 
 // ===== detail sheet =====
@@ -382,13 +384,21 @@ function renderList() {
       <span class="nm">${s.bangai === '1' ? '<span class="tag">番外編</span>' : ''}${esc(s.name)}<span class="sub">${esc(s.genre)}${s.price ? ' ・ ' + yen(s.price) : ''}${dist}</span></span>
     </button></li>`;
   }).join('');
+  // Opening a shop from the list: don't move the map; ✕ / back returns to the list at the same scroll spot
   ul.querySelectorAll('.row').forEach(b => b.onclick = () => {
     const s = shops.find(x => x.code === b.dataset.code);
+    listScroll = $('rows-wrap').scrollTop;
     hideList();
-    showSheet(s);
+    showSheet(s, { pan: false });
     trackShop(s, 'list');
-    history.replaceState({ layer: 'sheet', code: s.code }, '', '#' + s.code);
+    history.pushState({ layer: 'sheet', code: s.code, fromList: true }, '', '#' + s.code);
   });
+}
+let listScroll = 0;
+function reopenList() {
+  list.classList.add('open');
+  list.setAttribute('aria-hidden', 'false');
+  $('rows-wrap').scrollTop = listScroll;
 }
 function openList() { renderList(); list.classList.add('open'); list.setAttribute('aria-hidden', 'false'); pushLayer('list'); }
 function hideList() { list.classList.remove('open'); list.setAttribute('aria-hidden', 'true'); }
