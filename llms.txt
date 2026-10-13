@@ -1,0 +1,173 @@
+# 神楽坂/飯田橋グルメ 一覧マップ
+
+> Instagram「@kagurabashi_gourmet」が神楽坂・飯田橋周辺で実際に食べたお店123軒を、料理の味だけで★1〜★5の5段階で評価した地図。
+
+- サイト: https://gourmetmap.github.io/kagurabashi/
+- 運営: https://www.instagram.com/kagurabashi_gourmet/
+- 最終更新: 2026-10-09
+- 星の基準(料理の味のみ。接客・雰囲気・値段・ドリンクは考慮外): ★5 死ぬほど美味しい / ★4 めっちゃ美味しい / ★3 かなり美味しい(リピートしたい) / ★2 普通に美味しい / ★1 好みではない / ★対象外 ドリンク中心のお店
+- 店ごとのリンク: https://gourmetmap.github.io/kagurabashi/#<投稿コード> で地図上のお店の詳細が開く。元の投稿は https://www.instagram.com/p/<投稿コード>/
+
+## ジャンル別のおすすめ
+
+- 神楽坂・飯田橋のラーメンは23軒を掲載。おすすめは飯田橋大勝軒(★5)、らーめん ぽっぽっ屋 水道橋店(★4)、RaMeN TOMO TOKYO 九段下ラーメン(★4・〜1,500円)、らぁ麺ゃ 煮干しのRYOMA(★4)。
+- 神楽坂・飯田橋の和食は17軒を掲載。おすすめは鮨濱 神楽坂(★4・〜13,000円)、別邸 鳥茶屋(★4・〜2,000円)、讃岐ブルース飯田橋(★4)、日本橋海鮮丼 つじ半 神楽坂店(★4)。
+- 神楽坂・飯田橋の居酒屋は12軒を掲載。おすすめは酒場 なるくち(★4・〜5,000円)、神楽坂 睦(★4)、坂下良酒倉庫(★4)。
+- 神楽坂・飯田橋の焼き鳥は4軒を掲載。おすすめは焼鳥ブロシェット 神楽坂(★4・〜6,000円)。
+- 神楽坂・飯田橋の焼肉は7軒を掲載。おすすめは神楽坂 たれ焼肉のんき(★3・〜6,000円)、味角苑（ミカクエン）(★3・〜6,000円)、梨々苑 焼肉(★3・〜7,000円)、GOSU(★3)、焼肉こじま離れ 飯田橋(★3)。
+- 神楽坂・飯田橋の中華は9軒を掲載。おすすめは本格四川料理 麻辣先生飯田橋2号店(★4)。
+- 神楽坂・飯田橋のアジア・エスニックは6軒を掲載。おすすめは南印度料理 TOKYO BHAVAN(★3・〜2,500円)、Taihu Tokyo(★3・〜5,000円)、神楽坂タイレストラン(★3)。
+- 神楽坂・飯田橋のカレーは5軒を掲載。星が最も高いのは餐事(sanZi[サンジ])(★2・〜1,500円)、Yamitukiカリー 飯田橋駅(★2・〜1,000円)、スパイスカレー アルクロード(★2)、日乃屋カレー 飯田橋東口店(★2)。
+- 神楽坂・飯田橋のイタリアンは16軒を掲載。おすすめはにんにく料理専門店 はじめの一っぽ(★4・〜7,000円)、TROMBA(★4・〜8,000円)、神楽坂しゅうご(★4)、N/enne エンネ(★4)。
+- 神楽坂・飯田橋のフレンチは5軒を掲載。おすすめはメゾン・ド・ラ・ブルゴーニュ 飯田橋(★4・〜6,000円)。
+- 神楽坂・飯田橋の洋食・その他は5軒を掲載。おすすめはCirco(★5・〜9,000円)。
+- 神楽坂・飯田橋のバーは9軒を掲載。星が最も高いのはBEERNOTE 神楽坂(★2・〜6,000円)、YEBISU BAR 神楽坂店(★2・〜4,000円)。
+
+## 全店リスト(ジャンル別・星の高い順)
+
+### ラーメン
+- 飯田橋大勝軒 — ★5 ・ 東京都千代田区富士見2丁目12-16 ・ ひとこと: 真面目に働いてるのがバカらしくなる味 (https://gourmetmap.github.io/kagurabashi/#DLMTGNXpJOk)
+- らーめん ぽっぽっ屋 水道橋店 — ★4 ・ 東京都千代田区神田三崎町2丁目21-11 ゑびすビル 1F ・ ひとこと: BTSってそんなすごいんや (https://gourmetmap.github.io/kagurabashi/#Da_MO3rkh8w)
+- RaMeN TOMO TOKYO 九段下ラーメン — ★4 ・ 予算〜1,500円 ・ 東京都千代田区九段北1丁目9-2 エクセレントビル九段 1F ・ ひとこと: 想像以上に美味くてびっくりした (https://gourmetmap.github.io/kagurabashi/#DP8M_o6iatP)
+- らぁ麺ゃ 煮干しのRYOMA — ★4 ・ 東京都新宿区神楽坂2丁目6-1 1階 ・ ひとこと: ありきたりと思われるかもしれませんが、私は好きです (https://gourmetmap.github.io/kagurabashi/#DKv_KUxpBbb)
+- 二階堂 — ★3 ・ 予算〜1,000円 ・ 東京都千代田区九段北1丁目9-14 101 ・ ひとこと: ハイレベル醤油ラーメン屋が集まる謎の区画を形成 (https://gourmetmap.github.io/kagurabashi/#DWgWEeoCbg0)
+- 家家家 — ★3 ・ 東京都千代田区富士見2丁目7-2 102 ・ ひとこと: 意外にうまいぜYearYeahYeah♪ (https://gourmetmap.github.io/kagurabashi/#DOPmt75ieOp)
+- サーモンnoodle3.0 — ★3 ・ 東京都新宿区神楽坂6丁目26 カーサイオキ 3 102 ・ ひとこと: 落ち着いて聞いてください、あなたはパスタです (https://gourmetmap.github.io/kagurabashi/#DNR84LDJ1Yf)
+- 用心棒 市ヶ谷飯田橋 — ★3 ・ 東京都新宿区市谷田町3丁目8-3 ・ ひとこと: 冷やし中華界の★5 (https://gourmetmap.github.io/kagurabashi/#DKgXXvaJJs4)
+- MORRY — ★3 ・ 東京都新宿区揚場町1-16 ・ ひとこと: 同系統ならば来来亭の方がより好み (https://gourmetmap.github.io/kagurabashi/#DHbSI1NJWAk)
+- トーキョーニューミクスチャーヌードル 八咫烏 CHIKARABO — ★2 ・ 予算〜1,300円 ・ 東京都千代田区神田三崎町3丁目7-13 三大ビル B1 ・ ひとこと: 店名が長すぎて読んでいる間に食べ終わっていた (https://gourmetmap.github.io/kagurabashi/#DaWgcEqia4v)
+- つじ田 飯田橋店 — ★2 ・ 予算〜1,200円 ・ 東京都千代田区飯田橋 ・ ひとこと: 初めて魚介豚骨ラーメンを食べた時の衝撃を取り戻したい (https://gourmetmap.github.io/kagurabashi/#DXQ-dGdiZxC)
+- 倫道 — ★2 ・ 予算〜1,000円 ・ 東京都千代田区九段北4丁目2-15 1F ・ ひとこと: ラーメンにしては深そうな店名 (https://gourmetmap.github.io/kagurabashi/#DUJ_hQQEqYD)
+- 俺流塩らーめん 神楽坂店 — ★2 ・ 予算〜1,500円 ・ 東京都新宿区神楽坂2丁目11 第83東京ビル 1F ・ ひとこと: 可もねぇ不可もねぇ (https://gourmetmap.github.io/kagurabashi/#DQ9uAIFkrKC)
+- つじ田 味噌の章 飯田橋駅 — ★2 ・ 東京都千代田区飯田橋4丁目8-14 ・ ひとこと: 横の一般つじ田は並んでるのに、こちらの客は私1人 (https://gourmetmap.github.io/kagurabashi/#DMmes1IpapU)
+- 神楽坂家系ラーメン モンタナ — ★2 ・ 東京都新宿区神楽坂5丁目8 かぐら坂五丁目ビル1F ・ ひとこと: 外装、店名、かなり好き (https://gourmetmap.github.io/kagurabashi/#DKJs1A1J8QI)
+- 鶏soba 座銀 神楽坂東京本店 — ★2 ・ 東京都新宿区神楽坂3丁目2-12 摩耶ビル 1F ・ ひとこと: 上に乗ってるピロピロ、私は不要と存じます (https://gourmetmap.github.io/kagurabashi/#DJUTGGXp9Tk)
+- 中華そば 髙はし — ★2 ・ 東京都千代田区飯田橋3丁目11-30 ・ ひとこと: 地元(ぢもと)に愛されています (https://gourmetmap.github.io/kagurabashi/#DI5SsBRpSB-)
+- 中国ラーメン 揚州商店 飯田橋ラムラ店 — ★2 ・ 東京都新宿区神楽河岸1-1 飯田橋セントラルプラザ ラムラ1Ｆ ・ ひとこと: 可読な店名にしていただけないでしょうか (https://gourmetmap.github.io/kagurabashi/#DHimWIeJZbt)
+- 六麗 豚らーめん — ★1 ・ 予算〜1,200円 ・ 東京都千代田区飯田橋1-3-8 ・ ひとこと: たくさん食べることができた (https://gourmetmap.github.io/kagurabashi/#Dc4_T_diRus)
+- 天下一 飯田橋店 — ★1 ・ 予算〜1,000円 ・ 東京都新宿区揚場町1-13 ・ ひとこと: 愚かな私をお許しください (https://gourmetmap.github.io/kagurabashi/#DYYVRu1ifEQ)
+- 麺魂 力組 本店 — ★1 ・ 予算〜1,000円 ・ 東京都千代田区飯田橋1丁目8-7 ・ ひとこと: シンガポール旅行に行ってきました (https://gourmetmap.github.io/kagurabashi/#DVSsT6NiYy8)
+- 豚ノヴァ -雫- 神田水道橋店 — ★1 ・ 予算〜1,000円 ・ 東京都千代田区西神田2丁目8-9 ・ ひとこと: 秋元康が絶賛‼︎というプラスマイナスの間で揺れ動く好感度の針が、今ピタリと止まった (https://gourmetmap.github.io/kagurabashi/#DSMYkMGiagA)
+- 伊太八 — ★1 ・ 東京都新宿区白銀町1-17 ・ ひとこと: 外観に比して攻めたラーメンを提供している (https://gourmetmap.github.io/kagurabashi/#DPGM12qiBjO)
+
+### 和食
+- 鉄板焼 花 — ★5 ・ 東京都渋谷区代官山町13-6 RSC 代官山 2F ・ 番外編(神楽坂・飯田橋以外) ・ ひとこと: リピしています (https://gourmetmap.github.io/kagurabashi/#DPi7eWLCcEv)
+- 鮨濱 神楽坂 — ★4 ・ 予算〜13,000円 ・ 東京都新宿区矢来町122-5 おぼろの坂ハウス 101 ・ ひとこと: 美味なるかな (https://gourmetmap.github.io/kagurabashi/#DRZqQhuifRq)
+- 別邸 鳥茶屋 — ★4 ・ 予算〜2,000円 ・ 東京都新宿区神楽坂3丁目6 ・ ひとこと: 帰り道にタクシーバトルに遭遇 空気が張り詰める (https://gourmetmap.github.io/kagurabashi/#DP0QNhmCafi)
+- 讃岐ブルース飯田橋 — ★4 ・ 東京都千代田区飯田橋4丁目5-16 エル千代田ビル 101 ・ ひとこと: 東大生に人気の店の系列とのことだが、確かに旨い 舌の偏差値も、悪くない (https://gourmetmap.github.io/kagurabashi/#DNlAMR2pLkK)
+- 日本橋海鮮丼 つじ半 神楽坂店 — ★4 ・ 東京都新宿区神楽坂3丁目2 山ノ内ビル 1F ・ ひとこと: 言わずと知れている (https://gourmetmap.github.io/kagurabashi/#DHbQDPjpwOL)
+- こんぶや 神楽坂 — ★3 ・ 予算〜6,000円 ・ 東京都新宿区神楽坂3丁目2 神楽坂Kビル 1階 ・ ひとこと: おでんなので越えられない壁はあるものの、かなりオススメ (https://gourmetmap.github.io/kagurabashi/#DWqcxLyifDY)
+- 和牛すき焼き そしじ 麻布十番店 — ★3 ・ 予算〜10,000円 ・ 東京都港区麻布十番1丁目5-29 レジデンス101 ・ 番外編(神楽坂・飯田橋以外) ・ ひとこと: 焼肉ふたごの系列店 (https://gourmetmap.github.io/kagurabashi/#DUc7jyCiWx2)
+- 神楽坂 山せみ — ★3 ・ 予算〜1,500円 ・ 東京都新宿区神楽坂5丁目31 1F ・ ひとこと: ヤマセミは、セミではなく鳥の名前 明日すぐ使える豆知識をあなたに 神楽坂/飯田橋グルメ (https://gourmetmap.github.io/kagurabashi/#DQq-IcWCbKw)
+- 九頭龍蕎麦 本店 — ★3 ・ 東京都新宿区神楽坂3丁目3-3-2 クレール神楽坂ＶＩ ・ ひとこと: “ある程度きちんとした店のそばであれば、 味はどこでも変わらない“ - 全日本国民 (2025) (https://gourmetmap.github.io/kagurabashi/#DMRtX1KJgv4)
+- 広島お好み焼き くるみ — ★3 ・ 東京都新宿区神楽坂5丁目30 イセヤビル 1F ・ ひとこと: 八百屋と併設。それが大切。一味がナイスなエッセンス。Yo (https://gourmetmap.github.io/kagurabashi/#DLlnpqPpqTb)
+- 讃岐うどん 川金 — ★3 ・ 東京都新宿区下宮比町2-3 大野屋ビル 1階 ・ ひとこと: かしわ天含めかなり美味 (https://gourmetmap.github.io/kagurabashi/#DIGDxhwp-wY)
+- 松屋 飯田橋東口店 — ★2 ・ 予算〜1,000円 ・ 東京都新宿区下宮比町1-1 1階 ・ ひとこと: カレーは意外にうまいんです (https://gourmetmap.github.io/kagurabashi/#DdwWQbjCSCE)
+- 越後屋 亀丸 — ★2 ・ 東京都千代田区富士見2丁目10-2 ・ ひとこと: 鯖が大きいが故に嬉しく、鯖が大きいが故に後半気持ち悪くなってきた (https://gourmetmap.github.io/kagurabashi/#DOJCnemiQBI)
+- 鮨處 八千代 飯田橋店 — ★2 ・ 東京都新宿区神楽河岸1-1 セントラルプラザ 2階 ・ ひとこと: ピッタリと期待値通り (https://gourmetmap.github.io/kagurabashi/#DJvYvf4JhJT)
+- TOKYO SUNFLOWER IIDABASHI — ★2 ・ 東京都千代田区富士見2丁目2-7 ・ ひとこと: 飯田橋の素敵プレイスに位置付く (https://gourmetmap.github.io/kagurabashi/#DJXxTnjyqHQ)
+- とんかつ 憲進 — ★2 ・ 東京都新宿区神楽坂3丁目1-23 Ami神楽坂 2階 ・ ひとこと: 成蔵からの独立店 成蔵の方が美味しく思えたのは、私の味蕾が発達したからなのか、思い込みか (https://gourmetmap.github.io/kagurabashi/#DIxxKz6JLas)
+- 豊しま 飯田橋店 — ★2 ・ 東京都新宿区下宮比町1-9 広田ビル ・ ひとこと: 提供速度は、10秒フラット (https://gourmetmap.github.io/kagurabashi/#DH6F-ykpB-k)
+- だいこんや — ★1 ・ 予算〜1,500円 ・ 東京都新宿区神楽坂4丁目3-15 煉瓦塔ビル 2F ・ ひとこと: 全て私の不徳の致すところです (https://gourmetmap.github.io/kagurabashi/#DYqrjAoCee5)
+- きしめん 尾張屋 — ★1 ・ 東京都千代田区飯田橋4丁目8-11 ・ ひとこと: 髭男のMake Me Wonder良いです (https://gourmetmap.github.io/kagurabashi/#DUu7no5ic1g)
+
+### 居酒屋
+- 酒場 なるくち — ★4 ・ 予算〜5,000円 ・ 東京都新宿区神楽坂3丁目2 ＹＳビル 3F ・ ひとこと: 明けましておめでとうございます (https://gourmetmap.github.io/kagurabashi/#DTE5Xz2Catc)
+- 神楽坂 睦 — ★4 ・ 東京都新宿区袋町17 ・ ひとこと: むつみ と読みます。勉強が足りないのでは？ (https://gourmetmap.github.io/kagurabashi/#DOauozciVxB)
+- 坂下良酒倉庫 — ★4 ・ 東京都新宿区神楽坂1丁目11 ふぁーぶる1 2F ・ ひとこと: 我思量質丁度 (https://gourmetmap.github.io/kagurabashi/#DMb5pZUp5y-)
+- うおいだ — ★3 ・ 予算〜7,000円 ・ 東京都新宿区神楽坂3丁目2 2F ・ ひとこと: 神楽坂にありそうでない何の変哲もなく美味しい和食居酒屋 (https://gourmetmap.github.io/kagurabashi/#DbQvQJaCWk4)
+- えちご 神楽坂 — ★2 ・ 予算〜6,000円 ・ 東京都新宿区神楽坂3丁目6-19 青柳LKビル 2階 ・ ひとこと: そばは、メニュー写真の隅に「写真は10人前です」との注釈があり、大胆すぎて面白い (https://gourmetmap.github.io/kagurabashi/#DX1PA9dCXjb)
+- 島ぶーちゃんぷる — ★2 ・ 予算〜4,000円 ・ 東京都新宿区神楽坂3丁目6-19 青柳LKビル 1階 ・ ひとこと: ｵｷﾅﾜ…ﾀﾞｯｯｯ!! (https://gourmetmap.github.io/kagurabashi/#DVnfpiriQRA)
+- 飯田橋 新太郎 — ★2 ・ 東京都千代田区飯田橋4丁目5-12 ＳＫ飯田橋ビル 1階 ・ ひとこと: 隣の人が株主優待を使用していたが、上場していると知った途端味わいが単調に感じるようになってしまった (https://gourmetmap.github.io/kagurabashi/#DL4KMDuJgQz)
+- う〜みや 飯田橋神楽坂下 — ★2 ・ 東京都新宿区神楽坂1丁目9 森川ビル ・ ひとこと: 沖縄は、こんなもんじゃない (https://gourmetmap.github.io/kagurabashi/#DKBhEc3p7HS)
+- 神楽坂 椿々 — ★2 ・ 東京都新宿区筑土八幡町5-12 サンプラザ 神楽坂 ・ ひとこと: 予約を取ろうと電話をしたら、「はーい、ちんちんでーす」と言われた 真っ直ぐな目をして (https://gourmetmap.github.io/kagurabashi/#DJNlT6dyxJi)
+- 和ビストロ 創作料理 SAKU 神楽坂店 — ★2 ・ 東京都新宿区神楽坂4丁目3 神楽坂楽山ビル 5F ・ ひとこと: うどんを食べなさい (https://gourmetmap.github.io/kagurabashi/#DHw-220Sx5B)
+- 博多餃子酒場 シロナガスクジラ — ★1 ・ 東京都新宿区下宮比町3-12 1F101 ・ ひとこと: 餃子は、塩分濃度100%か0%の2種類が提供されている (https://gourmetmap.github.io/kagurabashi/#DNAnDQap76e)
+- 魚串さくらさく 神楽坂店 — ★1 ・ 東京都新宿区神楽坂6丁目8-46 アプロードビル 1F ・ ひとこと: まずはありがとうございます (https://gourmetmap.github.io/kagurabashi/#DLa-u6OT3NY)
+
+### 焼き鳥
+- 南青山 七鳥目 — ★5 ・ 東京都港区南青山7丁目13-13 フォレストビル B1F ・ 番外編(神楽坂・飯田橋以外) ・ ひとこと: 番外編に逃げていいですか (https://gourmetmap.github.io/kagurabashi/#DNryuTw0uit)
+- 焼鳥ブロシェット 神楽坂 — ★4 ・ 予算〜6,000円 ・ 東京都新宿区神楽坂6丁目8 ※周囲も同住所の為 店舗名”焼鳥ブロシェット神楽坂”で検索を ・ ひとこと: 外見、盛り付けは美味しくなさそうなのに、美味しい (https://gourmetmap.github.io/kagurabashi/#DRQg8yDEjeP)
+- 神楽坂 今井屋本店 — ★3 ・ 東京都新宿区神楽坂2丁目13-2 ホームズ飯田橋 B1F ・ ひとこと: 良さげな焼き鳥屋なのに串の提供が爆速で、矛盾している (https://gourmetmap.github.io/kagurabashi/#DLtNYpFyMO2)
+- あほう鳥 — ★2 ・ 予算〜4,000円 ・ 東京都新宿区津久戸町3-20 イサミビル 3F ・ ひとこと: 外国人従業員たちの仲が良さそうで見ていて嬉しい (https://gourmetmap.github.io/kagurabashi/#DSfIo1siWa8)
+- 鳥貴族 飯田橋東口店 — ★2 ・ 東京都千代田区飯田橋4丁目7-8 第3山商ビル Iタワー 4階 ・ ひとこと: 国民的アイドルチェーン (https://gourmetmap.github.io/kagurabashi/#DIbJIQPp8v9)
+
+### 焼肉
+- 生ラム専門店 肉汁屋 (生ラムかんな) — ★5 ・ 予算〜6,000円 ・ 東京都港区新橋4丁目15-8 ・ 番外編(神楽坂・飯田橋以外) ・ ひとこと: 美味すぎて30回ぐらい行っている (https://gourmetmap.github.io/kagurabashi/#DcVUDuSCXqD)
+- 神楽坂 たれ焼肉のんき — ★3 ・ 予算〜6,000円 ・ 東京都新宿区神楽坂3丁目6-44 1Ｆ ・ ひとこと: 会社のありがたい先輩に紹介いただいたお店 (https://gourmetmap.github.io/kagurabashi/#DbyBrHeCY9g)
+- 味角苑（ミカクエン） — ★3 ・ 予算〜6,000円 ・ 東京都新宿区神楽坂3丁目3-2 ・ ひとこと: こういうのでいいんだよ (https://gourmetmap.github.io/kagurabashi/#DYHQ1vwibs1)
+- 梨々苑 焼肉 — ★3 ・ 予算〜7,000円 ・ 東京都新宿区神楽坂1丁目10 會田ビル ・ ひとこと: 叙々苑監修のお店とのこと (https://gourmetmap.github.io/kagurabashi/#DSwZLDMCado)
+- GOSU — ★3 ・ 東京都千代田区富士見2丁目10-2 飯田橋サクラテラス 3F ・ ひとこと: 多くのマダムが生息している (https://gourmetmap.github.io/kagurabashi/#DO0bDEhCaJM)
+- 焼肉こじま離れ 飯田橋 — ★3 ・ 東京都千代田区飯田橋4丁目7-8 第2山商ビル 1F ・ ひとこと: こじま本店は大阪にある模様 焼肉こじま離れすぎ に改名しなさい (https://gourmetmap.github.io/kagurabashi/#DN9t4ZSCWrC)
+- 神楽坂焼肉 Lasso (ラッソー) — ★2 ・ 予算〜7,000円 ・ 東京都新宿区神楽坂2丁目20 ・ ひとこと: 垂直と見紛うほどの急階段がある (https://gourmetmap.github.io/kagurabashi/#DPpwnu6iafm)
+- 焼肉多文 — ★2 ・ 東京都新宿区神楽坂6丁目65 ・ ひとこと: 異常な量の煙の中、手探りで食べ進む (再訪を踏まえて星の数更新しています) (https://gourmetmap.github.io/kagurabashi/#DNHoVY9Jwii)
+
+### 中華
+- 本格四川料理 麻辣先生飯田橋2号店 — ★4 ・ 東京都新宿区下宮比町2-7 ・ ひとこと: 麻辣先生、中華が旨いです…… (https://gourmetmap.github.io/kagurabashi/#DM1cJQUp2OZ)
+- 芝蘭 — ★3 ・ 東京都新宿区神楽坂3丁目1 クレール神楽坂2 2F ・ ひとこと: 麻婆は痺れれば痺れるほどうまい メモお願いします (https://gourmetmap.github.io/kagurabashi/#DJgt_IopBLu)
+- リトル成都 — ★3 ・ 東京都新宿区揚場町2-27 MIT飯田橋ビル1F ・ ひとこと: 僭越ながら、凝っていた時期の自作麻婆豆腐の方が若干美味しい (https://gourmetmap.github.io/kagurabashi/#DJLSTZupAyW)
+- タンタンタイガー — ★2 ・ 予算〜1,500円 ・ 東京都新宿区水道町2-2 ・ ひとこと: 汁なし担々麺って美味しいんだけど、全部同じ味ではないか、とも思っている (https://gourmetmap.github.io/kagurabashi/#DTZB7rnEt6O)
+- 純中国伝統 四川料理 芊品香 — ★2 ・ 東京都千代田区飯田橋2丁目16-4 九段下コート ・ ひとこと: 中華スープではなく味噌スープなことにご留意 (https://gourmetmap.github.io/kagurabashi/#DHbSp-SJtwC)
+- 中華料理 ふくや 後楽園店 — ★2 ・ 東京都文京区後楽2丁目19-7 ・ ひとこと: 平日昼時は混んでいるためご留意 (https://gourmetmap.github.io/kagurabashi/#DHbPXsGpomx)
+- 神楽坂飯店 — ★1 ・ 予算〜1,000円 ・ 東京都新宿区神楽坂1丁目14 ・ ひとこと: チェンソーマンレゼ編を観たが、かなり良かった (https://gourmetmap.github.io/kagurabashi/#DQfzhYkiXy0)
+- 楼蘭 — ★1 ・ 東京都千代田区飯田橋4丁目1-5 ・ ひとこと: 他のメニューをお勧めします (https://gourmetmap.github.io/kagurabashi/#DLFgbuHJ-pi)
+- PAIRON — ★1 ・ 東京都新宿区新小川町8-32 ・ ひとこと:  (https://gourmetmap.github.io/kagurabashi/#DHbQiaTpE6P)
+
+### アジア・エスニック
+- 南印度料理 TOKYO BHAVAN — ★3 ・ 予算〜2,500円 ・ 東京都千代田区飯田橋1丁目12-7 日新ＭＳビル 1F ・ ひとこと: 是非大人数で！ (https://gourmetmap.github.io/kagurabashi/#DZPI2R3CSCz)
+- Taihu Tokyo — ★3 ・ 予算〜5,000円 ・ 東京都新宿区神楽坂4丁目4 河庄ビル 1F ・ ひとこと: 一階と二階の雰囲気の落差を肴に、台湾料理とクラフトビールを楽しむ (https://gourmetmap.github.io/kagurabashi/#DQOawA4iRoC)
+- 神楽坂タイレストラン — ★3 ・ 東京都新宿区神楽坂6丁目24 ・ ひとこと: アイムコップンカ、アンドユー？ (https://gourmetmap.github.io/kagurabashi/#DKUcuVDJOeQ)
+- ロッディー 飯田橋タイレストラン — ★2 ・ 予算〜1,200円 ・ 東京都千代田区富士見2丁目5-10 ・ ひとこと: 知り合いの東南アジア人の家に行ってご飯を作ってもらう みたいな雰囲気と味だった (https://gourmetmap.github.io/kagurabashi/#DeDoNZpiYCH)
+- 神楽坂エスニック SAPANA 神楽坂店 — ★2 ・ 予算〜1,200円 ・ 東京都新宿区神楽坂2丁目6 PORTA神楽坂 2F ・ ひとこと: 書かれていないが、ご飯大盛りが無料だ (https://gourmetmap.github.io/kagurabashi/#DV2XZUGierj)
+- IAMSEOUL 神楽坂 — ★1 ・ 東京都新宿区神楽坂2丁目6-1 2F ・ ひとこと: 日本でカンジャンケジャン/セウを頼むのはダメだと、頭では分かっているのに (https://gourmetmap.github.io/kagurabashi/#DR528iPEkPm)
+
+### カレー
+- 餐事(sanZi[サンジ]) — ★2 ・ 予算〜1,500円 ・ 東京都新宿区神楽坂6丁目26 YMビル 101 ・ ひとこと: 俺にはスパイスカレーはわからない (https://gourmetmap.github.io/kagurabashi/#DXi33KNiRCc)
+- Yamitukiカリー 飯田橋駅 — ★2 ・ 予算〜1,000円 ・ 東京都千代田区富士見2丁目11-12 木村ビル 1F ・ ひとこと: おすすめにあったチーズカレーを頼んだが、チーズカレーは好きではない！ごめん！ (https://gourmetmap.github.io/kagurabashi/#DRpD2C2iUeZ)
+- スパイスカレー アルクロード — ★2 ・ 東京都千代田区飯田橋4丁目8-11 ・ ひとこと: 上等カレーと店舗が融合しており、実態が掴めない (https://gourmetmap.github.io/kagurabashi/#DPQxEWNCBu-)
+- 日乃屋カレー 飯田橋東口店 — ★2 ・ 東京都新宿区下宮比町1-1 村上ビル 東棟1F ・ ひとこと: 自習室ではない (https://gourmetmap.github.io/kagurabashi/#DL_Odtky6pX)
+- さんとよん — ★1 ・ 東京都千代田区富士見2丁目4-7 島ビル 2F ・ ひとこと: スパイスカレー向けの味蕾が備わっていないため、あまり味がしなかった (https://gourmetmap.github.io/kagurabashi/#DOh7gy1CQrN)
+
+### イタリアン
+- にんにく料理専門店 はじめの一っぽ — ★4 ・ 予算〜7,000円 ・ 東京都新宿区神楽坂4丁目5 ・ ひとこと: チューハイにもニンニクが入っている、心すべし (https://gourmetmap.github.io/kagurabashi/#DdfolPSCQ7J)
+- TROMBA — ★4 ・ 予算〜8,000円 ・ 東京都新宿区袋町2-1 鈴木ビル 1-A ・ ひとこと: 星はあくまで料理に対してですが、ワインもとても美味しいです (https://gourmetmap.github.io/kagurabashi/#DasBalNiSg1)
+- 神楽坂しゅうご — ★4 ・ 東京都新宿区筑土八幡町5-12 相川 ビル 1F ・ ひとこと: 親を連れて行くとなったらここだと思います (https://gourmetmap.github.io/kagurabashi/#DOsQFWwCQEK)
+- N/enne エンネ — ★4 ・ 東京都新宿区神楽坂3丁目1 京花ビル 4階 ・ ひとこと: ★★★★⭐︎ 店名偏差値75 (https://gourmetmap.github.io/kagurabashi/#DNZ5TM_pEW2)
+- ボローニャ — ★3 ・ 予算〜7,000円 ・ 東京都新宿区新小川町3-4 山烋ビル 1F ・ ひとこと: イタリアンな姿しか見たことがないが、絵本屋でもあるみたい (https://gourmetmap.github.io/kagurabashi/#DaIH5ZNiajJ)
+- Qkurt — ★3 ・ 予算〜12,000円 ・ 東京都新宿区下宮比町3-12 明成ビル 102 ・ ひとこと: 店の作りがめっちゃオシャレ (https://gourmetmap.github.io/kagurabashi/#DW_oD2BCeob)
+- ソプラアクア — ★3 ・ 予算〜7,000円 ・ 東京都新宿区矢来町43 ライオンズマンション矢来町 1F ・ ひとこと: グループ使いに非常に良いです (https://gourmetmap.github.io/kagurabashi/#DWIjfdbiUYY)
+- RistoPizza by Napoli staca 麻布台ヒルズ店 — ★3 ・ 予算〜3,000円 ・ 東京都港区麻布台1丁目3-1 ヒルズ タワープラザ 3階 ・ 番外編(神楽坂・飯田橋以外) ・ ひとこと: イタリアンスターミーが提供されている (https://gourmetmap.github.io/kagurabashi/#DRERMmpiQ8w)
+- 神楽坂タンテボーネ — ★3 ・ 東京都新宿区神楽坂3丁目1 キクシマビル 1F ・ ひとこと: 桃と生ハムの冷製パスタが新しいし美味い！ (https://gourmetmap.github.io/kagurabashi/#DO_JYTbiFlu)
+- レガーメ 神楽坂 — ★3 ・ 東京都新宿区神楽坂3丁目6-15 GE神楽坂ビル3F ・ ひとこと: 「おてんばスタッフと舌鼓のビート」 ASIAN KUNG-FU GENERATION (https://gourmetmap.github.io/kagurabashi/#DLTvAwoJ7HE)
+- L‘alba — ★3 ・ 神楽坂, DeLCCS KAGURAZAKA B1F, 3-19 津久戸町 新宿区 東京都 162-0821 ・ ひとこと: 入り口の隠れ家的な感じが素敵 (https://gourmetmap.github.io/kagurabashi/#DHbRubypY_q)
+- 神楽坂ココチーノ — ★2 ・ 予算〜1,500円 ・ 東京都新宿区神楽坂3丁目1-15 シャトー寿寿 1階 ・ ひとこと: 小林製薬とは無関係 (https://gourmetmap.github.io/kagurabashi/#DcpQcA7EjJI)
+- 五右衛門 飯田橋ラムラ店 — ★2 ・ 予算〜1,200円 ・ 東京都新宿区神楽河岸1-1 セントラルプラザ・ラムラ 2階 ・ ひとこと: 日本ファイト🇯🇵 (https://gourmetmap.github.io/kagurabashi/#DZ1TuP4iWyp)
+- スピガ飯田橋 — ★2 ・ 東京都新宿区下宮比町3-1 大島ビル 1F ・ ひとこと: ”パスタの旨さの7割は麺で決まる“ - 神楽坂/飯田橋グルメ(2025年) (https://gourmetmap.github.io/kagurabashi/#DMMqD3up-6C)
+- NODO — ★2 ・ 東京都新宿区袋町3 ・ ひとこと: イタリアの秋田県のような地域に特化 (最後から2番目の写真は他の店の写真を間違えてあげてしまいました) (https://gourmetmap.github.io/kagurabashi/#DIWmKinyewT)
+- カルボナーラ専門店 HASEGAWA神楽坂 — ★1 ・ 東京都新宿区神楽坂3丁目6 金井ビル B1 ・ ひとこと: 食べてる最中にカルボナーラをそこまで好きじゃないことに気づいた 私のミスです (https://gourmetmap.github.io/kagurabashi/#DK3gmFUpANZ)
+- Buona carne! — ★1 ・ 東京都新宿区神楽坂3丁目2-1 actoビル1f ・ ひとこと: 学生時代を思い出す味 (https://gourmetmap.github.io/kagurabashi/#DKlNxAZSQ43)
+
+### フレンチ
+- メゾン・ド・ラ・ブルゴーニュ 飯田橋 — ★4 ・ 予算〜6,000円 ・ 東京都新宿区神楽坂3丁目6-5 ・ ひとこと: まぢ本格的。すき。 (https://gourmetmap.github.io/kagurabashi/#DQyEesTiRrL)
+- flamme-flamme — ★3 ・ 東京都新宿区神楽坂3丁目2-15 山ノ内ビル 2F ・ ひとこと: グリル野菜が特に美味しい (https://gourmetmap.github.io/kagurabashi/#DHbP0AmJoL-)
+- レ・ピコロ — ★3 ・ 東京都新宿区神楽坂4丁目3-11 つなしょうテラス 1F ・ ひとこと: いい感じに凝っている (https://gourmetmap.github.io/kagurabashi/#DHbPmhDpn3z)
+- 神楽坂ビストロのんき — ★2 ・ 予算〜6,000円 ・ 東京都新宿区神楽坂6丁目8-18 松崎ビル 1Ｆ ・ ひとこと: 合コンにいいらしい。あなたも恋を始めませんか (https://gourmetmap.github.io/kagurabashi/#DQYZ7RvCd6d)
+- Nico Chelsea — ★2 ・ 東京都新宿区津久戸町3-6 ・ ひとこと: 猪・鹿・うずら・トド・兎などが食べられます ハーブ多め熊怖め (https://gourmetmap.github.io/kagurabashi/#DIDXzSLJXWd)
+
+### 洋食・その他
+- Circo — ★5 ・ 予算〜9,000円 ・ 東京都新宿区神楽坂4丁目5-4 ・ ひとこと: すごくうまい。雰囲気もすごくいい。接客も気持ちいい。 私の負けだ (https://gourmetmap.github.io/kagurabashi/#DeTRq1zCYiu)
+- dacō？神楽坂 — ★3 ・ 予算〜500円 ・ 東京都新宿区神楽坂6丁目67-1 1F ・ ひとこと: こんな店を開いてみたかった (https://gourmetmap.github.io/kagurabashi/#DVFzBJpCbQL)
+- ニクバル クオン — ★2 ・ 予算〜1,000円 ・ 東京都新宿区下宮比町1-1 B1F ・ ひとこと: 日本で1番旨い、は個人的には大きく出ているなとは思った (https://gourmetmap.github.io/kagurabashi/#DbyA-auCYF5)
+- エルプルポ — ★2 ・ 予算〜7,000円 ・ 東京都新宿区神楽坂4丁目3 宮崎ビル 1F ・ ひとこと: ウニに釣られたそこのあなた ここは3枚目のやつを食べに行く店となります (https://gourmetmap.github.io/kagurabashi/#DTmn-xmiZ6U)
+- レストランニューグローリー — ★1 ・ 予算〜1,000円 ・ 東京都文京区後楽2丁目3-10 白王ビル ・ ひとこと: すごい美味というわけではないのですが、このエリアでランチ帯に大きなハンバーグを提供する意義を、飯田橋/神楽坂グルメは認識しています (https://gourmetmap.github.io/kagurabashi/#DcCz7EtCXUa)
+
+### バー
+- BEERNOTE 神楽坂 — ★2 ・ 予算〜6,000円 ・ 東京都新宿区津久戸町1-14 ARTS 神楽坂 2階 ・ ひとこと: 神楽坂で珍しいクラフトビールのお店 神楽坂で珍しいファミレス風の内装 (https://gourmetmap.github.io/kagurabashi/#DdLrAJbCeyZ)
+- YEBISU BAR 神楽坂店 — ★2 ・ 予算〜4,000円 ・ 東京都新宿区神楽坂2丁目6-ポルタ ・ ひとこと: 2次会向けのお店 (https://gourmetmap.github.io/kagurabashi/#DZjM1SKCQkX)
+- World Wine Bar by Pieroth 神楽坂店 — ★対象外 ・ 予算〜3,000円 ・ 東京都新宿区神楽坂3丁目6 サムライ堂ビル 1階～2階 ・ ひとこと: ピーロートが運営しているワインバー (https://gourmetmap.github.io/kagurabashi/#DZAFtS_idOO)
+- 10’colors — ★対象外 ・ 予算〜3,000円 ・ 東京都新宿区神楽坂4丁目4 ・ ひとこと:  (https://gourmetmap.github.io/kagurabashi/#DT49adziTGl)
+- ワイン Pirka 神楽坂 — ★対象外 ・ 東京都新宿区岩戸町1 Ｍ’ｓ神楽坂 4F ・ ひとこと: 素敵アトモスフィアー (https://gourmetmap.github.io/kagurabashi/#DN2f_icUj5S)
+- bar_she said she said — ★対象外 ・ 東京都新宿区新小川町1-17 1F ・ ひとこと: thatが省略されている (https://gourmetmap.github.io/kagurabashi/#DMuHbs6p-fm)
+- トーキョーサワースタンド — ★対象外 ・ 東京都新宿区神楽坂3丁目1-26 MS I Kagurazaka, 1F ・ ひとこと: 俺も神楽坂で2軒目需要を捉えたい (https://gourmetmap.github.io/kagurabashi/#DI72gB-yTys)
+- アンブラ — ★対象外 ・ 東京都新宿区若宮町16-3 塩谷ビル ・ ひとこと: パテには目がありません (https://gourmetmap.github.io/kagurabashi/#DIguYaLJUEB)
+- 神楽坂アッカ — ★対象外 ・ 東京都新宿区神楽坂6丁目65-1 ・ ひとこと: ワインバーなもののワインの写真を撮り損ねる (https://gourmetmap.github.io/kagurabashi/#DHzi_y1SzrV)

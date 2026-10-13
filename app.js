@@ -206,6 +206,34 @@ function starHTML(n) {
   return `<span class="stars" aria-label="星${n}つ">${'★'.repeat(n)}<span class="off">${'★'.repeat(5 - n)}</span></span>`;
 }
 
+// ===== share: copy a link that opens this shop =====
+// Instagram's paper-plane "share" glyph
+const SHARE_ICON = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="3" x2="9.218" y2="10.083"/><polygon points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334"/></svg>';
+
+let toastTimer = null;
+function toast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+async function copyShopLink(s) {
+  const url = `${location.origin}${location.pathname}#${s.code}`;
+  let ok = false;
+  try { await navigator.clipboard.writeText(url); ok = true; } catch (e) { /* fall back below */ }
+  if (!ok) { // older iOS / in-app browsers
+    const ta = document.createElement('textarea');
+    ta.value = url; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, url.length);
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    ta.remove();
+  }
+  toast(ok ? 'リンクをコピーしました' : 'コピーできませんでした');
+  if (ok) track('share_copy', { shop_name: s.name });
+}
+
 // via: 'pin' | 'list' | 'link' (shared #code URL) — lets GA show how people reach a shop
 function trackShop(s, via) {
   track('shop_open', { shop_name: s.name, stars: s.stars || 0, genre: s.genre, via });
@@ -230,7 +258,12 @@ function showSheet(s, { pan = true } = {}) {
       <span class="zoom">タップで拡大</span>
     </button>
     <div class="body">
-      <div class="sheet-top">${starHTML(s.stars)}<button class="close" id="sheet-close" aria-label="閉じる">✕</button></div>
+      <div class="sheet-top">${starHTML(s.stars)}
+        <span class="top-btns">
+          <button class="share" id="sheet-share" aria-label="このお店のリンクをコピー">${SHARE_ICON}</button>
+          <button class="close" id="sheet-close" aria-label="閉じる">✕</button>
+        </span>
+      </div>
       <h2 class="shop">${esc(s.name)}</h2>
       <div class="facts">
         ${s.bangai === '1' ? '<span class="tag">番外編</span>' : ''}<span>${esc(s.genre)}</span>
@@ -248,6 +281,7 @@ function showSheet(s, { pan = true } = {}) {
   sheet.setAttribute('aria-hidden', 'false');
   sheet.scrollTop = 0;
   $('sheet-close').onclick = closeSheet;
+  $('sheet-share').onclick = () => copyShopLink(s);
   $('photo').onclick = () => { openLightbox(s); track('photo_zoom', { shop_name: s.name }); };
   $('go-ig').onclick = () => track('instagram_click', { shop_name: s.name, stars: s.stars || 0 });
   $('go-gmap').onclick = () => track('gmap_click', { shop_name: s.name });
