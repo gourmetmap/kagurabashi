@@ -370,7 +370,6 @@ function renderList() {
   if (sortKey === 'stars') v.sort((a, b) => (b.stars || 0) - (a.stars || 0) || b.date.localeCompare(a.date));
   if (sortKey === 'date') v.sort((a, b) => b.date.localeCompare(a.date));
   if (sortKey === 'near') v.sort((a, b) => distM(a) - distM(b));
-  $('list-title').textContent = `お店一覧 ${v.length}軒`;
   const ul = $('rows');
   if (!v.length) { ul.innerHTML = '<li class="empty">該当するお店がありません</li>'; return; }
   ul.innerHTML = v.map(s => {
@@ -395,6 +394,7 @@ function openList() { renderList(); list.classList.add('open'); list.setAttribut
 function hideList() { list.classList.remove('open'); list.setAttribute('aria-hidden', 'true'); }
 $('btn-list').onclick = () => { openList(); track('list_open'); };
 $('ig-icon').onclick = () => track('profile_click', { from: 'header_icon' });
+$('ig-icon-list').onclick = () => track('profile_click', { from: 'list_icon' });
 $('list-close').onclick = () => popLayer('list');
 $('btn-map').onclick = () => popLayer('list');
 $('search').oninput = e => { query = e.target.value; renderList(); };
