@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>リンク確認</title>
+<style>
+  body { margin: 0; font-family: "Noto Sans JP", sans-serif; background: #FFFFFF; color: #111114; }
+  main { max-width: 640px; margin: 0 auto; padding: 20px 16px 40px; }
+  h1 { font-size: 18px; margin: 0 0 8px; }
+  p { font-size: 13px; line-height: 1.6; margin: 0 0 12px; color: #2A2C30; }
+  .ua { font-size: 11px; color: #6E6E6A; word-break: break-all; background: #F4F4F2; padding: 8px; margin-bottom: 16px; }
+  a.t { display: block; margin: 0 0 10px; padding: 14px 12px; background: #111114; color: #FFFFFF; text-decoration: none; font-weight: 700; font-size: 15px; }
+  a.t small { display: block; font-weight: 500; font-size: 11px; color: #C9C9C5; margin-top: 2px; word-break: break-all; }
+</style>
+</head>
+<body>
+<main>
+  <h1>リンクの開き方 確認ページ</h1>
+  <p>インスタのプロフィールのリンクからこのページを開き、下のボタンを上から順に押してください。押したあと「Instagramアプリの投稿画面(いいねが押せる)」になったか、「アプリ内ブラウザのWebページ」になったか、「何も起きない/エラー」かを番号ごとに教えてください。1つ試したら戻ってきて次を押してください。</p>
+  <div class="ua" id="ua"></div>
+  <div id="links"></div>
+</main>
+<script>
+  // test post: Circo
+  const code = 'DeTRq1zCYiu';
+  const A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+  let id = 0n; for (const ch of code) id = id * 64n + BigInt(A.indexOf(ch));
+  const ua = navigator.userAgent;
+  const inApp = /Instagram|Line\/|FBAN|FBAV/i.test(ua);
+  document.getElementById('ua').textContent = `判定: ${inApp ? 'アプリ内ブラウザ' : '通常ブラウザ'} / ${/iPhone|iPad|iPod/.test(ua) ? 'iPhone' : /Android/.test(ua) ? 'Android' : 'その他'}\nUA: ${ua}`;
+  const web = `https://www.instagram.com/p/${code}/`;
+  const tests = [
+    ['① アプリの投稿リンク', `instagram://media?id=${id}`, ''],
+    ['② Webリンク (同じ画面)', web, ''],
+    ['③ Webリンク (新しいタブ)', web, '_blank'],
+    ['④ Android専用 (intent)', `intent://www.instagram.com/p/${code}/#Intent;package=com.instagram.android;scheme=https;end`, ''],
+    ['⑤ Safariで開く (iPhone)', `x-safari-https://www.instagram.com/p/${code}/`, ''],
+    ['⑥ instagram.com/p (wwwなし)', `https://instagram.com/p/${code}/`, ''],
+  ];
+  document.getElementById('links').innerHTML = tests.map(([label, href, target]) =>
+    `<a class="t" href="${href}"${target ? ` target="${target}" rel="noopener"` : ''}>${label}<small>${href.replace(/&/g, '&amp;')}</small></a>`).join('');
+</script>
+</body>
+</html>
