@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>神楽坂/飯田橋グルメ 一覧マップ</title>
+<script>
+  // Instagram's in-app browser turns "#" into "%23", so ".../kagurabashi/#<post code>" or "#ga-off"
+  // arrives here as a 404. Rebuild the intended URL and go to the map.
+  (function () {
+    var path = decodeURIComponent(location.pathname);
+    var base = '/kagurabashi/';
+    var hash = '';
+    var i = path.indexOf('#');
+    if (i >= 0) hash = path.slice(i);
+    else if (location.hash) hash = location.hash;
+    location.replace(base + location.search + hash);
+  })();
+</script>
+<style>
+  body { margin: 0; font-family: "Noto Sans JP", sans-serif; background: #FFFFFF; color: #111114; }
+  main { max-width: 640px; margin: 0 auto; padding: 48px 16px; }
+  a { color: #111114; font-weight: 700; }
+</style>
+</head>
+<body>
+<main>
+  <p><a href="/kagurabashi/">神楽坂/飯田橋グルメ 一覧マップを開く</a></p>
+</main>
+</body>
+</html>

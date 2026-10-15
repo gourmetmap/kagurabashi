@@ -8,12 +8,15 @@ const DATA_URL = 'data.csv';
 // Loaded from this file (not an inline snippet) so the page's CSP can forbid inline scripts.
 window.dataLayer = window.dataLayer || [];
 function gtag() { dataLayer.push(arguments); }
-// Owner / test devices opt out: open the site once with #ga-off (undo with #ga-on)
+// Owner / test devices opt out: open the site once with ?ga=off or #ga-off (undo with ?ga=on / #ga-on).
+// ?ga= exists because Instagram's in-app browser mangles "#" in links.
 let gaOff = false;
 try {
-  if (location.hash === '#ga-off') localStorage.setItem('ga_off', '1');
-  if (location.hash === '#ga-on') localStorage.removeItem('ga_off');
+  const gaParam = new URLSearchParams(location.search).get('ga');
+  if (location.hash === '#ga-off' || gaParam === 'off') localStorage.setItem('ga_off', '1');
+  if (location.hash === '#ga-on' || gaParam === 'on') localStorage.removeItem('ga_off');
   gaOff = localStorage.getItem('ga_off') === '1';
+  if (gaParam) history.replaceState(null, '', location.pathname + location.hash);
 } catch (e) { /* storage blocked: keep analytics on */ }
 if (GA_ID && !gaOff) {
   const s = document.createElement('script');
