@@ -370,8 +370,21 @@ map.on('click', () => { if (selected) closeSheet(); });
     if (dragging) {
       const fast = dy > 40 && dy / Math.max(1, Date.now() - t0) > 0.5; // quick flick
       sheet.classList.remove('dragging');
-      sheet.style.transform = '';
-      if (dy > 90 || fast) closeSheet();
+      if (dy > 90 || fast) {
+        // continue from where the finger let go and slide out quickly (no bounce back to the top first)
+        sheet.style.transition = 'transform .16s ease-in';
+        sheet.style.transform = `translateY(${sheet.offsetHeight + 20}px)`;
+        setTimeout(() => {
+          sheet.style.transition = 'none';
+          hideSheet();
+          sheet.style.transform = '';
+          if ((history.state || {}).layer === 'sheet') history.back();
+          else history.replaceState(null, '', location.pathname + location.search);
+          requestAnimationFrame(() => requestAnimationFrame(() => { sheet.style.transition = ''; }));
+        }, 160);
+      } else {
+        sheet.style.transform = ''; // not far enough: spring back
+      }
     }
     y0 = null; dragging = false;
   };
