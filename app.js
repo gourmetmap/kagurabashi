@@ -301,7 +301,6 @@ function showSheet(s, { pan = true } = {}) {
   $('photo').onclick = () => { openLightbox(s); track('photo_zoom', { shop_name: s.name }); };
   $('go-ig').onclick = () => track('instagram_click', { shop_name: s.name, stars: s.stars || 0 });
   $('go-gmap').onclick = () => track('gmap_click', { shop_name: s.name });
-  enableSwipeDown();
   markActiveRow(s);
   if (pan === 'ifHidden') {
     // PC list click: the map is visible next to the list, so only slide it when the pin is off-screen
@@ -346,28 +345,39 @@ function closeSheet() {
 map.on('click', () => { if (selected) closeSheet(); });
 
 // swipe the sheet down (from the handle or the photo) to close it
-function enableSwipeDown() {
-  let y0 = null, dy = 0;
-  const start = e => { if (sheet.scrollTop > 0) return; y0 = e.touches[0].clientY; dy = 0; sheet.classList.add('dragging'); };
-  const move = e => {
+// Swipe down anywhere on the sheet to close it. If the sheet's content is scrolled, a downward
+// drag scrolls it back first; only a pull that starts at the very top drags the sheet away.
+(function swipeDownToClose() {
+  let y0 = null, t0 = 0, dy = 0, dragging = false, startedAtTop = false;
+  sheet.addEventListener('touchstart', e => {
+    if (!sheet.classList.contains('open') || e.touches.length !== 1) return;
+    y0 = e.touches[0].clientY; t0 = Date.now(); dy = 0; dragging = false;
+    startedAtTop = sheet.scrollTop <= 0;
+  }, { passive: true });
+  sheet.addEventListener('touchmove', e => {
     if (y0 == null) return;
-    dy = Math.max(0, e.touches[0].clientY - y0);
+    const d = e.touches[0].clientY - y0;
+    if (!dragging) {
+      if (startedAtTop && sheet.scrollTop <= 0 && d > 8) { dragging = true; sheet.classList.add('dragging'); }
+      else { if (d < -8 || !startedAtTop) y0 = null; return; } // normal scroll
+    }
+    e.preventDefault(); // stop the page/sheet from scrolling while we drag
+    dy = Math.max(0, d - 8);
     sheet.style.transform = `translateY(${dy}px)`;
-  };
+  }, { passive: false });
   const end = () => {
-    if (y0 == null) return;
-    sheet.classList.remove('dragging');
-    sheet.style.transform = '';
-    if (dy > 90) closeSheet();
-    y0 = null;
+    if (y0 == null && !dragging) return;
+    if (dragging) {
+      const fast = dy > 40 && dy / Math.max(1, Date.now() - t0) > 0.5; // quick flick
+      sheet.classList.remove('dragging');
+      sheet.style.transform = '';
+      if (dy > 90 || fast) closeSheet();
+    }
+    y0 = null; dragging = false;
   };
-  ['grab', 'photo'].forEach(id => {
-    const el = $(id);
-    el.addEventListener('touchstart', start, { passive: true });
-    el.addEventListener('touchmove', move, { passive: true });
-    el.addEventListener('touchend', end);
-  });
-}
+  sheet.addEventListener('touchend', end);
+  sheet.addEventListener('touchcancel', end);
+})();
 
 // ===== ⓘ star definitions =====
 const infoPop = $('info-pop');
