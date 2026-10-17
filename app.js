@@ -123,10 +123,12 @@ JY_STATIONS.forEach(([name, lat, lng]) => L.marker([lat, lng], {
   pane: 'stations', interactive: false, keyboard: false,
   icon: L.divIcon({ className: 'station jy', html: `<span class="dot"></span><span class="lbl">${name}</span>`, iconSize: [0, 0] }),
 }).addTo(map));
+// line color -> darker shade for readable text on the pale map
+const LINE_TEXT = { '#80C241': '#5E9A2C', '#FFD400': '#A68A00', '#009BBF': '#007F9E', '#C1A470': '#8F7748', '#00AC9B': '#00877A', '#B6007A': '#B6007A' };
 function lineName(name, color, latlng) {
   L.marker(latlng, {
     pane: 'stations', interactive: false, keyboard: false,
-    icon: L.divIcon({ className: 'line-name', html: `<span style="border-left-color:${color}">${name}</span>`, iconSize: [0, 0] }),
+    icon: L.divIcon({ className: 'line-name', html: `<span style="color:${LINE_TEXT[color] || color}">${name}</span>`, iconSize: [0, 0] }),
   }).addTo(map);
 }
 lineName('JR山手線', '#80C241', [35.73665, 139.74722]);
