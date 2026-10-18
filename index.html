@@ -119,9 +119,9 @@
   }
   .pin.dark-digit { color: var(--black); }
   .pin.light-digit { color: var(--white); }
-  /* station landmarks: black square dot on the exact spot + black label above */
+  /* station landmarks: white round dot on the exact spot + black label above */
   .station { position: relative; }
-  .station .dot { position: absolute; left: -4px; top: -4px; width: 8px; height: 8px; background: var(--black); outline: 1.5px solid var(--white); }
+  .station .dot { position: absolute; left: -4px; top: -4px; width: 8px; height: 8px; background: var(--white); border: 2px solid var(--black); border-radius: 50% !important; box-sizing: border-box; }
   .station .lbl {
     position: absolute; left: 0; bottom: 6px; transform: translateX(-50%);
     background: var(--black); color: var(--white); white-space: nowrap;
@@ -129,7 +129,7 @@
   }
   .very-far .station .lbl { display: none; }
   /* JR Yamanote stations: green-ringed dot, label always shown */
-  .station.jy .dot { border-radius: 50% !important; background: var(--white); outline: none; border: 2px solid #80C241; box-sizing: border-box; }
+  .station.jy .dot { border-color: #80C241; }
   .very-far .station.jy .lbl { display: block; }
   /* rail line names: small text in the line color with a white halo */
   .line-name { position: relative; }
@@ -428,6 +428,6 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjtwXFlh7CjE7ZJ+/vcRZRkIYIb6p4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="app.js?v=202610181130"></script>
+<script src="app.js?v=202610181144"></script>
 </body>
 </html>
