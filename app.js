@@ -18,7 +18,8 @@ try {
   gaOff = localStorage.getItem('ga_off') === '1';
   if (gaParam) history.replaceState(null, '', location.pathname + location.hash);
 } catch (e) { /* storage blocked: keep analytics on */ }
-if (GA_ID && !gaOff) {
+// local previews (localhost) never count
+if (GA_ID && !gaOff && location.hostname === 'gourmetmap.github.io') {
   const s = document.createElement('script');
   s.async = true;
   s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
